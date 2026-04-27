@@ -2,240 +2,189 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Biel.Fun Arcade MAX - 300 Jogos</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Biel.Fun - Jogos do Biel</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-.header{padding:30px 20px;text-align:center;background:#0a0a0a;position:sticky;top:0;z-index:100;border-bottom:1px solid #222}
-.header h1{font-size:42px;font-weight:800;margin-bottom:8px}
-.header p{color:#888;font-size:14px}
-.stats{display:flex;gap:20px;justify-content:center;margin-top:15px}
-.stat{background:#111;padding:8px 16px;border-radius:20px;font-size:13px}
-.filtros{padding:15px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;background:#0a0a0a;position:sticky;top:131px;z-index:99;border-bottom:1px solid #222}
-.filtros button{padding:8px 16px;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:50px;cursor:pointer;font-weight:600;font-size:13px}
-.filtros button.ativo{background:#fff;color:#000;border-color:#fff}
-.filtros button:hover{border-color:#666}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px;padding:20px}
-.card{background:#0f0f0f;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid #1a1a1a;transition:.15s}
-.card:hover{border-color:#444;transform:translateY(-2px)}
-.card img{width:100%;height:160px;object-fit:cover;background:#1a1a1a}
-.card-body{padding:12px}
-.card h3{font-size:16px;margin-bottom:4px;line-height:1.3}
-.card p{font-size:12px;color:#666}
-.badge{font-size:10px;background:#222;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:6px;color:#aaa}
-.game-view{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;display:none}
-.game-header{height:50px;background:#111;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #222}
-.game-header h3{font-size:16px}
-.game-header button{background:#fff;color:#000;border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-weight:700;font-size:13px}
-.game-iframe{width:100%;height:calc(100% - 50px);border:none}
-.loading{text-align:center;padding:60px;color:#555;grid-column:1/-1}
-.busca{padding:15px;background:#0a0a0a;border-bottom:1px solid #222;position:sticky;top:182px;z-index:98}
-.busca input{width:100%;max-width:600px;margin:0 auto;display:block;padding:12px 20px;background:#1a1a1a;border:1px solid #333;border-radius:50px;color:#fff;font-size:15px}
-.busca input:focus{outline:none;border-color:#555}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;touch-action:manipulation}
+.tela{display:none;min-height:100vh;padding:20px}
+.tela.ativa{display:block}
+.menu{text-align:center;padding:40px 20px}
+.menu h1{font-size:42px;font-weight:800;margin-bottom:10px}
+.menu p{color:#888;margin-bottom:40px}
+.grid{display:grid;gap:20px;max-width:500px;margin:0 auto}
+.card{background:#111;border:2px solid #222;border-radius:20px;padding:30px;cursor:pointer;transition:.2s}
+.card:active{transform:scale(0.98);border-color:#fff}
+.card h2{font-size:24px;margin-bottom:8px}
+.card p{color:#666;font-size:14px}
+.voltar{position:fixed;top:15px;left:15px;background:#222;border:2px solid #444;color:#fff;padding:10px 18px;border-radius:50px;font-weight:700;cursor:pointer;z-index:100}
+.voltar:active{background:#333}
+
+/* CLICKER */
+.clicker{text-align:center;padding-top:60px}
+.clicker h1{font-size:36px;margin:20px 0}
+.moeda{width:200px;height:200px;background:linear-gradient(135deg,#ffd700,#ffaa00);border-radius:50%;margin:30px auto;display:flex;align-items:center;justify-content:center;font-size:70px;cursor:pointer;user-select:none;border:6px solid #ff8800;box-shadow:0 10px 30px rgba(255,170,0,.3)}
+.moeda:active{transform:scale(0.92)}
+.btn{background:#fff;color:#000;border:none;padding:16px 32px;border-radius:30px;font-weight:700;font-size:16px;margin:15px;cursor:pointer}
+.info{color:#999;margin:15px 0;font-size:15px}
+
+/* ADIVINHA */
+.adivinha{text-align:center;padding-top:60px}
+.adivinha h1{font-size:32px;margin:20px 0}
+.adivinha input{padding:18px;font-size:22px;border:3px solid #333;border-radius:15px;background:#111;color:#fff;width:220px;text-align:center;margin:20px}
+#dica{font-size:26px;margin:25px 0;min-height:35px;font-weight:700}
+
+/* SNAKE */
+.snake{text-align:center;padding-top:60px}
+canvas{background:#0a0a0a;display:block;margin:15px auto;border:3px solid #222;border-radius:10px}
+.info-snake{padding:15px;font-size:18px;font-weight:700}
+.controles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:320px;margin:20px auto;padding:0 20px}
+.btn-seta{background:#1a1a1a;color:#fff;border:3px solid #333;border-radius:15px;padding:22px;font-size:28px;cursor:pointer;user-select:none}
+.btn-seta:active{background:#333;transform:scale(0.95)}
+.vazio{visibility:hidden}
 </style>
 </head>
 <body>
-<div class="header">
-<h1>Biel.Fun Arcade MAX</h1>
-<p>Jogos HTML5 com iframe liberado em 27/04/2026</p>
-<div class="stats">
-<div class="stat">🎮 <span id="totalJogos">300</span> Jogos</div>
-<div class="stat">✅ 100% Funcionando</div>
-<div class="stat">📱 Mobile Ready</div>
+
+<!-- TELA MENU -->
+<div id="menu" class="tela ativa">
+<div class="menu">
+<h1>Biel.Fun</h1>
+<p>Jogos feitos pelo Biel</p>
+<div class="grid">
+<div class="card" onclick="abrirJogo('clicker')">
+<h2>👑 Biel Clicker</h2>
+<p>Clica e ganha BielCoins</p>
+</div>
+<div class="card" onclick="abrirJogo('adivinha')">
+<h2>🎯 Adivinha Biel</h2>
+<p>Adivinha o número de 1 a 100</p>
+</div>
+<div class="card" onclick="abrirJogo('snake')">
+<h2>🐍 Biel Snake</h2>
+<p>Cobrinha clássica mobile</p>
 </div>
 </div>
-<div class="busca">
-<input type="text" id="buscaInput" placeholder="🔍 Buscar jogo..." onkeyup="buscar()">
 </div>
-<div class="filtros">
-<button onclick="filtrar('todos')" class="ativo">Todos</button>
-<button onclick="filtrar('htmlgames')">HTMLGames 80</button>
-<button onclick="filtrar('idev')">iDev 50</button>
-<button onclick="filtrar('1000web')">1000Web 70</button>
-<button onclick="filtrar('scratch')">Scratch 40</button>
-<button onclick="filtrar('bubble')">Bubble 30</button>
-<button onclick="filtrar('playpager')">PlayPager 10</button>
-<button onclick="filtrar('itch')">Itch.io 20</button>
 </div>
-<div class="grid" id="grid"><div class="loading">Carregando 300 jogos...</div></div>
-<div class="game-view" id="gameView">
-<div class="game-header">
-<h3 id="gameTitle">Carregando...</h3>
-<button onclick="fechar()">✕ Fechar</button>
+
+<!-- JOGO 1: CLICKER -->
+<div id="clicker" class="tela">
+<button class="voltar" onclick="voltar()">← Menu</button>
+<div class="clicker">
+<h1 id="pontosClicker">0 BielCoins</h1>
+<div class="moeda" onclick="clicar()">👑</div>
+<p class="info" id="porClique">1 por clique</p>
+<button class="btn" onclick="upgrade()">Upgrade - <span id="custo">50</span> coins</button>
 </div>
-<iframe id="gameFrame" class="game-iframe" allow="fullscreen; autoplay" allowfullscreen></iframe>
 </div>
+
+<!-- JOGO 2: ADIVINHA -->
+<div id="adivinha" class="tela">
+<button class="voltar" onclick="voltar()">← Menu</button>
+<div class="adivinha">
+<h1>Adivinha Biel</h1>
+<p class="info">Número de 1 a 100</p>
+<input type="number" id="chute" placeholder="Teu chute" min="1" max="100">
+<br>
+<button class="btn" onclick="tentar()">Tentar</button>
+<p id="dica"></p>
+<p class="info">Tentativas: <span id="tent">0</span> | Recorde: <span id="rec">-</span></p>
+</div>
+</div>
+
+<!-- JOGO 3: SNAKE -->
+<div id="snake" class="tela">
+<button class="voltar" onclick="voltar()">← Menu</button>
+<div class="snake">
+<div class="info-snake">Pontos: <span id="pontosSnake">0</span> | Recorde: <span id="recSnake">0</span></div>
+<canvas id="jogoSnake" width="300" height="300"></canvas>
+<div class="controles">
+<div class="vazio"></div>
+<div class="btn-seta" ontouchstart="mudaDir(0,-1)" onclick="mudaDir(0,-1)">⬆️</div>
+<div class="vazio"></div>
+<div class="btn-seta" ontouchstart="mudaDir(-1,0)" onclick="mudaDir(-1,0)">⬅️</div>
+<div class="btn-seta" ontouchstart="pausarSnake()" onclick="pausarSnake()">⏸️</div>
+<div class="btn-seta" ontouchstart="mudaDir(1,0)" onclick="mudaDir(1,0)">➡️</div>
+<div class="vazio"></div>
+<div class="btn-seta" ontouchstart="mudaDir(0,1)" onclick="mudaDir(0,1)">⬇️</div>
+<div class="vazio"></div>
+</div>
+</div>
+</div>
+
 <script>
-const jogos=[
-  // HTMLGAMES.COM - 80 JOGOS
-  {n:"Pyramid Solitaire Ancient Aztec",c:"htmlgames",u:"https://htmlgames.com/embed/Pyramid-Solitaire-Ancient-Aztec/",i:"https://htmlgames.com/uploaded/game/thumb/300/pyramidsolitaireancientegypt300200.webp"},
-  {n:"Mahjong Connect Classic",c:"htmlgames",u:"https://htmlgames.com/embed/Mahjong-Connect-Classic/",i:"https://htmlgames.com/uploaded/game/thumb/300/mahjongconnectclassic300200.webp"},
-  {n:"Bubble Shooter 3D",c:"htmlgames",u:"https://htmlgames.com/embed/Bubble-Shooter-3D/",i:"https://htmlgames.com/uploaded/game/thumb/300/bubbleshooter3d300200.webp"},
-  {n:"Sudoku Classic",c:"htmlgames",u:"https://htmlgames.com/embed/Sudoku-Classic/",i:"https://htmlgames.com/uploaded/game/thumb/300/sudokuclassic300200.webp"},
-  {n:"Spider Solitaire",c:"htmlgames",u:"https://htmlgames.com/embed/Spider-Solitaire/",i:"https://htmlgames.com/uploaded/game/thumb/300/spidersolitaire300200.webp"},
-  {n:"FreeCell Solitaire",c:"htmlgames",u:"https://htmlgames.com/embed/Freecell-Solitaire/",i:"https://htmlgames.com/uploaded/game/thumb/300/freecellsolitaire300200.webp"},
-  {n:"Jewel Quest",c:"htmlgames",u:"https://htmlgames.com/embed/Jewel-Quest/",i:"https://htmlgames.com/uploaded/game/thumb/300/jewelquest300200.webp"},
-  {n:"Klondike Solitaire",c:"htmlgames",u:"https://htmlgames.com/embed/Klondike-Solitaire/",i:"https://htmlgames.com/uploaded/game/thumb/300/klondikesolitaire300200.webp"},
-  {n:"Mahjong Tower",c:"htmlgames",u:"https://htmlgames.com/embed/Mahjong-Tower/",i:"https://htmlgames.com/uploaded/game/thumb/300/mahjongtower300200.webp"},
-  {n:"Tripeaks Solitaire",c:"htmlgames",u:"https://htmlgames.com/embed/Tripeaks-Solitaire/",i:"https://htmlgames.com/uploaded/game/thumb/300/tripeakssolitaire300200.webp"},
-  {n:"Golf Solitaire",c:"htmlgames",u:"https://htmlgames.com/embed/Golf-Solitaire/",i:"https://htmlgames.com/uploaded/game/thumb/300/golfsolitaire300200.webp"},
-  {n:"Crescent Solitaire",c:"htmlgames",u:"https://htmlgames.com/embed/Crescent-Solitaire/",i:"https://htmlgames.com/uploaded/game/thumb/300/crescentsolitaire300200.webp"},
-  {n:"Pyramid Solitaire Ancient Egypt",c:"htmlgames",u:"https://htmlgames.com/embed/Pyramid-Solitaire-Ancient-Egypt/",i:"https://htmlgames.com/uploaded/game/thumb/300/pyramidsolitaireancientegypt300200.webp"},
-  {n:"Pyramid Solitaire Mummy's Curse",c:"htmlgames",u:"https://htmlgames.com/embed/Pyramid-Solitaire-Mummys-Curse/",i:"https://htmlgames.com/uploaded/game/thumb/300/pyramidsolitairemummyscurse300200.webp"},
-  {n:"Pyramid Solitaire Saga",c:"htmlgames",u:"https://htmlgames.com/embed/Pyramid-Solitaire-Saga/",i:"https://htmlgames.com/uploaded/game/thumb/300/pyramidsolitairesaga300200.webp"},
-  {n:"Mahjong Dimensions",c:"htmlgames",u:"https://htmlgames.com/embed/Mahjong-Dimensions/",i:"https://htmlgames.com/uploaded/game/thumb/300/mahjongdimensions300200.webp"},
-  {n:"Mahjong Dark Dimensions",c:"htmlgames",u:"https://htmlgames.com/embed/Mahjong-Dark-Dimensions/",i:"https://htmlgames.com/uploaded/game/thumb/300/mahjongdarkdimensions300200.webp"},
-  {n:"Mahjong Alchemy",c:"htmlgames",u:"https://htmlgames.com/embed/Mahjong-Alchemy/",i:"https://htmlgames.com/uploaded/game/thumb/300/mahjongalchemy300200.webp"},
-  {n:"Mahjong Fortuna",c:"htmlgames",u:"https://htmlgames.com/embed/Mahjong-Fortuna/",i:"https://htmlgames.com/uploaded/game/thumb/300/mahjongfortuna300200.webp"},
-  {n:"Mahjong Remix",c:"htmlgames",u:"https://htmlgames.com/embed/Mahjong-Remix/",i:"https://htmlgames.com/uploaded/game/thumb/300/mahjongremix300200.webp"},
-  {n:"10x10",c:"htmlgames",u:"https://htmlgames.com/embed/10x10/",i:"https://htmlgames.com/uploaded/game/thumb/300/10x10300200.webp"},
-  {n:"2048",c:"htmlgames",u:"https://htmlgames.com/embed/2048/",i:"https://htmlgames.com/uploaded/game/thumb/300/2048300200.webp"},
-  {n:"Zuma Ball",c:"htmlgames",u:"https://htmlgames.com/embed/Zuma-Ball/",i:"https://htmlgames.com/uploaded/game/thumb/300/zumaball300200.webp"},
-  {n:"Bejeweled",c:"htmlgames",u:"https://htmlgames.com/embed/Bejeweled/",i:"https://htmlgames.com/uploaded/game/thumb/300/bejeweled300200.webp"},
-  {n:"Candy Crush",c:"htmlgames",u:"https://htmlgames.com/embed/Candy-Crush/",i:"https://htmlgames.com/uploaded/game/thumb/300/candycrush300200.webp"},
-  {n:"Bubble Shooter",c:"htmlgames",u:"https://htmlgames.com/embed/Bubble-Shooter/",i:"https://htmlgames.com/uploaded/game/thumb/300/bubbleshooter300200.webp"},
-  {n:"Bubble Shooter Pro",c:"htmlgames",u:"https://htmlgames.com/embed/Bubble-Shooter-Pro/",i:"https://htmlgames.com/uploaded/game/thumb/300/bubbleshooterpro300200.webp"},
-  {n:"Tetris",c:"htmlgames",u:"https://htmlgames.com/embed/Tetris/",i:"https://htmlgames.com/uploaded/game/thumb/300/tetris300200.webp"},
-  {n:"Snake",c:"htmlgames",u:"https://htmlgames.com/embed/Snake/",i:"https://htmlgames.com/uploaded/game/thumb/300/snake300200.webp"},
-  {n:"Pacman",c:"htmlgames",u:"https://htmlgames.com/embed/Pacman/",i:"https://htmlgames.com/uploaded/game/thumb/300/pacman300200.webp"},
-  {n:"Chess",c:"htmlgames",u:"https://htmlgames.com/embed/Chess/",i:"https://htmlgames.com/uploaded/game/thumb/300/chess300200.webp"},
-  {n:"Checkers",c:"htmlgames",u:"https://htmlgames.com/embed/Checkers/",i:"https://htmlgames.com/uploaded/game/thumb/300/checkers300200.webp"},
-  {n:"Backgammon",c:"htmlgames",u:"https://htmlgames.com/embed/Backgammon/",i:"https://htmlgames.com/uploaded/game/thumb/300/backgammon300200.webp"},
-  {n:"Dominoes",c:"htmlgames",u:"https://htmlgames.com/embed/Dominoes/",i:"https://htmlgames.com/uploaded/game/thumb/300/dominoes300200.webp"},
-  {n:"Minesweeper",c:"htmlgames",u:"https://htmlgames.com/embed/Minesweeper/",i:"https://htmlgames.com/uploaded/game/thumb/300/minesweeper300200.webp"},
-  {n:"Hearts",c:"htmlgames",u:"https://htmlgames.com/embed/Hearts/",i:"https://htmlgames.com/uploaded/game/thumb/300/hearts300200.webp"},
-  {n:"Spades",c:"htmlgames",u:"https://htmlgames.com/embed/Spades/",i:"https://htmlgames.com/uploaded/game/thumb/300/spades300200.webp"},
-  {n:"Yatzy",c:"htmlgames",u:"https://htmlgames.com/embed/Yatzy/",i:"https://htmlgames.com/uploaded/game/thumb/300/yatzy300200.webp"},
-  {n:"Scorpion Solitaire",c:"htmlgames",u:"https://htmlgames.com/embed/Scorpion-Solitaire/",i:"https://htmlgames.com/uploaded/game/thumb/300/scorpionsolitaire300200.webp"},
-  {n:"Forty Thieves Solitaire",c:"htmlgames",u:"https://htmlgames.com/embed/Forty-Thieves-Solitaire/",i:"https://htmlgames.com/uploaded/game/thumb/300/fortythievessolitaire300200.webp"},
-
-  // IDEV.GAMES - 50 JOGOS
-  {n:"Simple Platformer",c:"idev",u:"https://idev.games/embed/simple-platformer",i:"https://idev.games/games/simple-platformer/thumbnail.png"},
-  {n:"INSTANT HOCKEY",c:"idev",u:"https://idev.games/embed/instant-hockey-card-game",i:"https://idev.games/games/instant-hockey-card-game/thumbnail.png"},
-  {n:"EduFun",c:"idev",u:"https://idev.games/embed/edufun",i:"https://idev.games/games/edufun/thumbnail.png"},
-  {n:"Flyght",c:"idev",u:"https://idev.games/embed/flyght",i:"https://idev.games/games/flyght/thumbnail.png"},
-  {n:"Consigue el arte",c:"idev",u:"https://idev.games/embed/consigue-el-arte",i:"https://idev.games/games/consigue-el-arte/thumbnail.png"},
-  {n:"Space Shooter",c:"idev",u:"https://idev.games/embed/space-shooter",i:"https://idev.games/games/space-shooter/thumbnail.png"},
-  {n:"Tower Defense",c:"idev",u:"https://idev.games/embed/tower-defense",i:"https://idev.games/games/tower-defense/thumbnail.png"},
-  {n:"Racing Game",c:"idev",u:"https://idev.games/embed/racing-game",i:"https://idev.games/games/racing-game/thumbnail.png"},
-  {n:"Puzzle Quest",c:"idev",u:"https://idev.games/embed/puzzle-quest",i:"https://idev.games/games/puzzle-quest/thumbnail.png"},
-  {n:"Memory Match",c:"idev",u:"https://idev.games/embed/memory-match",i:"https://idev.games/games/memory-match/thumbnail.png"},
-
-  // 1000WEBGAMES.COM - 70 JOGOS
-  {n:"The Cargo 2",c:"1000web",u:"https://1000webgames.com/embed/the-cargo-2",i:"https://1000webgames.com/thumbs/the-cargo-2.jpg"},
-  {n:"Park The Taxi 3",c:"1000web",u:"https://1000webgames.com/embed/park-the-taxi-3",i:"https://1000webgames.com/thumbs/park-the-taxi-3.jpg"},
-  {n:"Warfare Area 3",c:"1000web",u:"https://1000webgames.com/embed/warfare-area-3",i:"https://1000webgames.com/thumbs/warfare-area-3.jpg"},
-  {n:"Truck Space 2",c:"1000web",u:"https://1000webgames.com/embed/truck-space-2",i:"https://1000webgames.com/thumbs/truck-space-2.jpg"},
-  {n:"Hard Wheels Winter 2",c:"1000web",u:"https://1000webgames.com/embed/hard-wheels-winter-2",i:"https://1000webgames.com/thumbs/hard-wheels-winter-2.jpg"},
-  {n:"Assault Time",c:"1000web",u:"https://1000webgames.com/embed/assault-time",i:"https://1000webgames.com/thumbs/assault-time.jpg"},
-  {n:"Tractor Trial 2",c:"1000web",u:"https://1000webgames.com/embed/tractor-trial-2",i:"https://1000webgames.com/thumbs/tractor-trial-2.jpg"},
-  {n:"Trials Ride 2",c:"1000web",u:"https://1000webgames.com/embed/trials-ride-2",i:"https://1000webgames.com/thumbs/trials-ride-2.jpg"},
-  {n:"Hard Wheels Winter",c:"1000web",u:"https://1000webgames.com/embed/hard-wheels-winter",i:"https://1000webgames.com/thumbs/hard-wheels-winter.jpg"},
-  {n:"Park The Taxi 2",c:"1000web",u:"https://1000webgames.com/embed/park-the-taxi-2",i:"https://1000webgames.com/thumbs/park-the-taxi-2.jpg"},
-  {n:"Truck Space",c:"1000web",u:"https://1000webgames.com/embed/truck-space",i:"https://1000webgames.com/thumbs/truck-space.jpg"},
-  {n:"Warfare Area 2",c:"1000web",u:"https://1000webgames.com/embed/warfare-area-2",i:"https://1000webgames.com/thumbs/warfare-area-2.jpg"},
-  {n:"The Cargo",c:"1000web",u:"https://1000webgames.com/embed/the-cargo",i:"https://1000webgames.com/thumbs/the-cargo.jpg"},
-  {n:"Park The Police Car",c:"1000web",u:"https://1000webgames.com/embed/park-the-police-car",i:"https://1000webgames.com/thumbs/park-the-police-car.jpg"},
-  {n:"Bullet Fury 2",c:"1000web",u:"https://1000webgames.com/embed/bullet-fury-2",i:"https://1000webgames.com/thumbs/bullet-fury-2.jpg"},
-  {n:"Trials Ice Ride",c:"1000web",u:"https://1000webgames.com/embed/trials-ice-ride",i:"https://1000webgames.com/thumbs/trials-ice-ride.jpg"},
-  {n:"Hard Wheels 2",c:"1000web",u:"https://1000webgames.com/embed/hard-wheels-2",i:"https://1000webgames.com/thumbs/hard-wheels-2.jpg"},
-  {n:"Parking Slot",c:"1000web",u:"https://1000webgames.com/embed/parking-slot",i:"https://1000webgames.com/thumbs/parking-slot.jpg"},
-  {n:"Assault Zone",c:"1000web",u:"https://1000webgames.com/embed/assault-zone",i:"https://1000webgames.com/thumbs/assault-zone.jpg"},
-  {n:"Time To Park 2",c:"1000web",u:"https://1000webgames.com/embed/time-to-park-2",i:"https://1000webgames.com/thumbs/time-to-park-2.jpg"},
-  {n:"Drive To Wreck",c:"1000web",u:"https://1000webgames.com/embed/drive-to-wreck",i:"https://1000webgames.com/thumbs/drive-to-wreck.jpg"},
-  {n:"4x4 Monster",c:"1000web",u:"https://1000webgames.com/embed/4x4-monster",i:"https://1000webgames.com/thumbs/4x4-monster.jpg"},
-  {n:"Parking Space",c:"1000web",u:"https://1000webgames.com/embed/parking-space",i:"https://1000webgames.com/thumbs/parking-space.jpg"},
-  {n:"Battle Area",c:"1000web",u:"https://1000webgames.com/embed/battle-area",i:"https://1000webgames.com/thumbs/battle-area.jpg"},
-  {n:"Tractor Trial",c:"1000web",u:"https://1000webgames.com/embed/tractor-trial",i:"https://1000webgames.com/thumbs/tractor-trial.jpg"},
-  {n:"OK Parking",c:"1000web",u:"https://1000webgames.com/embed/ok-parking",i:"https://1000webgames.com/thumbs/ok-parking.jpg"},
-  {n:"Warfare Area",c:"1000web",u:"https://1000webgames.com/embed/warfare-area",i:"https://1000webgames.com/thumbs/warfare-area.jpg"},
-  {n:"Trials Ride",c:"1000web",u:"https://1000webgames.com/embed/trials-ride",i:"https://1000webgames.com/thumbs/trials-ride.jpg"},
-  {n:"Park The Taxi",c:"1000web",u:"https://1000webgames.com/embed/park-the-taxi",i:"https://1000webgames.com/thumbs/park-the-taxi.jpg"},
-  {n:"Bullet Fury",c:"1000web",u:"https://1000webgames.com/embed/bullet-fury",i:"https://1000webgames.com/thumbs/bullet-fury.jpg"},
-  {n:"Hard Wheels",c:"1000web",u:"https://1000webgames.com/embed/hard-wheels",i:"https://1000webgames.com/thumbs/hard-wheels.jpg"},
-
-  // SCRATCH.MIT.EDU - 40 JOGOS
-  {n:"Getting Over It Scratch",c:"scratch",u:"https://scratch.mit.edu/projects/389464290/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/389464290_480x360.png"},
-  {n:"Geometry Dash Scratch",c:"scratch",u:"https://scratch.mit.edu/projects/105500895/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/105500895_480x360.png"},
-  {n:"Paper Minecraft",c:"scratch",u:"https://scratch.mit.edu/projects/10128407/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/10128407_480x360.png"},
-  {n:"Granny Scratch",c:"scratch",u:"https://scratch.mit.edu/projects/248269085/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/248269085_480x360.png"},
-  {n:"FNAF Scratch",c:"scratch",u:"https://scratch.mit.edu/projects/137014171/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/137014171_480x360.png"},
-  {n:"Appel",c:"scratch",u:"https://scratch.mit.edu/projects/60917032/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/60917032_480x360.png"},
-  {n:"Flappy Bird",c:"scratch",u:"https://scratch.mit.edu/projects/119615089/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/119615089_480x360.png"},
-  {n:"Undertale Battle",c:"scratch",u:"https://scratch.mit.edu/projects/129059383/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/129059383_480x360.png"},
-  {n:"Among Us Scratch",c:"scratch",u:"https://scratch.mit.edu/projects/444520098/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/444520098_480x360.png"},
-  {n:"Sonic Scratch",c:"scratch",u:"https://scratch.mit.edu/projects/315891584/embed",i:"https://cdn2.scratch.mit.edu/get_image/project/315891584_480x360.png"},
-
-  // BUBBLESHOOTER.NET - 30 JOGOS
-  {n:"Emoji Pop Bubble Shooter",c:"bubble",u:"https://bubbleshooter.net/embed/emoji-pop/",i:"https://bubbleshooter.net/thumbs/emoji-pop.jpg"},
-  {n:"Love Doge Draw To Connect",c:"bubble",u:"https://bubbleshooter.net/embed/love-doge/",i:"https://bubbleshooter.net/thumbs/love-doge.jpg"},
-  {n:"Chess Mate",c:"bubble",u:"https://bubbleshooter.net/embed/chess-mate/",i:"https://bubbleshooter.net/thumbs/chess-mate.jpg"},
-  {n:"Merge Me",c:"bubble",u:"https://bubbleshooter.net/embed/merge-me/",i:"https://bubbleshooter.net/thumbs/merge-me.jpg"},
-  {n:"Toilet Race",c:"bubble",u:"https://bubbleshooter.net/embed/toilet-race/",i:"https://bubbleshooter.net/thumbs/toilet-race.jpg"},
-  {n:"Farm House",c:"bubble",u:"https://bubbleshooter.net/embed/farm-house/",i:"https://bubbleshooter.net/thumbs/farm-house.jpg"},
-  {n:"Dice Merge",c:"bubble",u:"https://bubbleshooter.net/embed/dice-merge/",i:"https://bubbleshooter.net/thumbs/dice-merge.jpg"},
-  {n:"Monstertopia",c:"bubble",u:"https://bubbleshooter.net/embed/monstertopia/",i:"https://bubbleshooter.net/thumbs/monstertopia.jpg"},
-  {n:"Water Color Sort",c:"bubble",u:"https://bubbleshooter.net/embed/water-color-sort/",i:"https://bubbleshooter.net/thumbs/water-color-sort.jpg"},
-
-  // PLAYPAGER.COM - 10 JOGOS
-  {n:"Solitaire",c:"playpager",u:"https://playpager.com/embed/solitaire/index.html",i:"https://playpager.com/thumbs/solitaire.jpg"},
-  {n:"Sudoku",c:"playpager",u:"https://playpager.com/embed/sudoku/index.html",i:"https://playpager.com/thumbs/sudoku.jpg"},
-  {n:"Chess",c:"playpager",u:"https://playpager.com/embed/chess/index.html",i:"https://playpager.com/thumbs/chess.jpg"},
-  {n:"Checkers",c:"playpager",u:"https://playpager.com/embed/checkers/index.html",i:"https://playpager.com/thumbs/checkers.jpg"},
-  {n:"Backgammon",c:"playpager",u:"https://playpager.com/embed/backgammon/index.html",i:"https://playpager.com/thumbs/backgammon.jpg"},
-
-  // ITCH.IO - 20 JOGOS QUE LIBERAM EMBED
-  {n:"Celeste Classic",c:"itch",u:"https://maddymakesgamesinc.itch.io/celeste-classic/embed",i:"https://img.itch.zone/aW1nLzIxOTY1MjMucG5n/315x250%23c/9F8vXe.png"},
-  {n:"A Dark Room",c:"itch",u:"https://doublespeakgames.itch.io/a-dark-room/embed",i:"https://img.itch.zone/aW1nLzE4MDU2MjgucG5n/315x250%23c/6KjF%2BZ.png"},
-  {n:"Cookie Clicker Classic",c:"itch",u:"https://orteil.itch.io/cookie-clicker-classic/embed",i:"https://img.itch.zone/aW1nLzEyMzQ1Njc4LnBuZw==/315x250%23c/abc.png"},
-];
-
-let filtroAtual='todos';
-let termoBusca='';
-
-function render(){
-  let lista = jogos.filter(j=>{
-    let passaFiltro = filtroAtual==='todos' || j.c===filtroAtual;
-    let passaBusca = j.n.toLowerCase().includes(termoBusca.toLowerCase());
-    return passaFiltro && passaBusca;
-  });
-  document.getElementById('totalJogos').textContent=lista.length;
-  document.getElementById('grid').innerHTML = lista.length ? lista.map(j=>`
-    <div class="card" onclick="abrir('${j.u}','${j.n}')">
-      <img src="${j.i}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22280%22 height=%22160%22%3E%3Crect fill=%22%23111%22 width=%22280%22 height=%22160%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23444%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2214%22%3E${j.n}%3C/text%3E%3C/svg%3E'">
-      <div class="card-body">
-        <span class="badge">${j.c.toUpperCase()}</span>
-        <h3>${j.n}</h3>
-      </div>
-    </div>
-  `).join('') : '<div class="loading">Nenhum jogo encontrado</div>';
+// NAVEGAÇÃO
+function abrirJogo(jogo){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  document.getElementById(jogo).classList.add('ativa');
+  if(jogo=='snake')iniciarSnake();
+}
+function voltar(){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  document.getElementById('menu').classList.add('ativa');
+  pausadoSnake=true;
 }
 
-function filtrar(cat){
-  filtroAtual=cat;
-  document.querySelectorAll('.filtros button').forEach(b=>b.classList.remove('ativo'));
-  event.target.classList.add('ativo');
-  render();
+// CLICKER
+let pClick=parseInt(localStorage.getItem('bielCoins')||'0'),pc=parseInt(localStorage.getItem('bielPC')||'1'),custo=parseInt(localStorage.getItem('bielCusto')||'50');
+function updateClicker(){
+  document.getElementById('pontosClicker').innerText=pClick+' BielCoins';
+  document.getElementById('porClique').innerText=pc+' por clique';
+  document.getElementById('custo').innerText=custo;
+  localStorage.setItem('bielCoins',pClick);localStorage.setItem('bielPC',pc);localStorage.setItem('bielCusto',custo);
 }
+function clicar(){pClick+=pc;updateClicker()}
+function upgrade(){if(pClick>=custo){pClick-=custo;pc++;custo=Math.floor(custo*1.8);updateClicker()}}
+updateClicker();
 
-function buscar(){
-  termoBusca=document.getElementById('buscaInput').value;
-  render();
+// ADIVINHA
+let numAdivinha=Math.floor(Math.random()*100)+1,tentAdivinha=0,recAdivinha=parseInt(localStorage.getItem('bielRec')||'0');
+document.getElementById('rec').innerText=recAdivinha||'-';
+function tentar(){
+  let c=Number(document.getElementById('chute').value);
+  if(!c||c<1||c>100)return;
+  tentAdivinha++;document.getElementById('tent').innerText=tentAdivinha;
+  if(c==numAdivinha){
+    document.getElementById('dica').innerText='ACERTOU EM '+tentAdivinha+'!';
+    if(!recAdivinha||tentAdivinha<recAdivinha){recAdivinha=tentAdivinha;localStorage.setItem('bielRec',recAdivinha);document.getElementById('rec').innerText=recAdivinha}
+    setTimeout(()=>{numAdivinha=Math.floor(Math.random()*100)+1;tentAdivinha=0;document.getElementById('tent').innerText=0;document.getElementById('dica').innerText='Novo número!';document.getElementById('chute').value=''},2000)
+  }else if(c<numAdivinha){document.getElementById('dica').innerText='MAIOR 📈'}
+  else{document.getElementById('dica').innerText='MENOR 📉'}
+  document.getElementById('chute').value='';
 }
+document.getElementById('chute').addEventListener('keypress',e=>{if(e.key==='Enter')tentar()});
 
-function abrir(url,nome){
-  document.getElementById('gameView').style.display='block';
-  document.getElementById('gameTitle').textContent=nome;
-  document.getElementById('gameFrame').src=url;
+// SNAKE
+const canvasSnake=document.getElementById('jogoSnake'),ctxSnake=canvasSnake.getContext('2d'),grid=15,size=canvasSnake.width/grid;
+let snakeBody=[{x:7,y:7}],dirSnake={x:1,y:0},foodSnake=geraComidaSnake(),pontosSnake=0,recSnake=parseInt(localStorage.getItem('snakeRec')||'0'),pausadoSnake=true,veloSnake=120,jogoIniciado=false;
+document.getElementById('recSnake').innerText=recSnake;
+function geraComidaSnake(){let f;do{f={x:Math.floor(Math.random()*grid),y:Math.floor(Math.random()*grid)}}while(snakeBody.some(s=>s.x==f.x&&s.y==f.y));return f}
+function mudaDir(x,y){if(pausadoSnake)return;if(dirSnake.x==-x&&dirSnake.y==-y)return;dirSnake={x,y}}
+function pausarSnake(){pausadoSnake=!pausadoSnake}
+function iniciarSnake(){if(!jogoIniciado){jogoIniciado=true;pausadoSnake=false;loopSnake()}}
+function loopSnake(){
+  if(pausadoSnake){setTimeout(loopSnake,veloSnake);return}
+  let head={x:snakeBody[0].x+dirSnake.x,y:snakeBody[0].y+dirSnake.y};
+  if(head.x<0||head.x>=grid||head.y<0||head.y>=grid||snakeBody.some(s=>s.x==head.x&&s.y==head.y)){
+    if(pontosSnake>recSnake){recSnake=pontosSnake;localStorage.setItem('snakeRec',recSnake);document.getElementById('recSnake').innerText=recSnake}
+    snakeBody=[{x:7,y:7}];dirSnake={x:1,y:0};pontosSnake=0;foodSnake=geraComidaSnake();veloSnake=120;
+  }else{
+    snakeBody.unshift(head);
+    if(head.x==foodSnake.x&&head.y==foodSnake.y){pontosSnake+=10;foodSnake=geraComidaSnake();if(veloSnake>60)veloSnake-=2}else{snakeBody.pop()}
+  }
+  ctxSnake.fillStyle='#0a0a0a';ctxSnake.fillRect(0,0,canvasSnake.width,canvasSnake.height);
+  ctxSnake.fillStyle='#ff3333';ctxSnake.fillRect(foodSnake.x*size+3,foodSnake.y*size+3,size-6,size-6);
+  snakeBody.forEach((s,i)=>{ctxSnake.fillStyle=i==0?'#00ff00':'#00cc00';ctxSnake.fillRect(s.x*size+1,s.y*size+1,size-2,size-2)});
+  document.getElementById('pontosSnake').innerText=pontosSnake;
+  setTimeout(loopSnake,veloSnake);
 }
-
-function fechar(){
-  document.getElementById('gameView').style.display='none';
-  document.getElementById('gameFrame').src='';
-}
-
-render();
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('snake').classList.contains('ativa'))return;
+  if(e.key=='ArrowUp')mudaDir(0,-1);if(e.key=='ArrowDown')mudaDir(0,1);
+  if(e.key=='ArrowLeft')mudaDir(-1,0);if(e.key=='ArrowRight')mudaDir(1,0);
+  if(e.key==' ')pausarSnake();
+});
 </script>
 </body>
 </html>
