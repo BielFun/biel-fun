@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Biel Fun</title>
+<title>Biel.Fun</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#000}
@@ -13,12 +13,13 @@ body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rob
 .header p{font-size:20px;color:#666;margin:0}
 .container{max-width:1400px;margin:0 auto;padding:0 20px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:30px;padding:40px 0}
-.card{background:#f5f5f5;border-radius:20px;overflow:hidden;cursor:pointer;transition:.2s}
+.card{background:#f5f5f5;border-radius:20px;overflow:hidden;cursor:pointer;transition:.2s;position:relative}
 .card:hover{transform:scale(1.02)}
 .card img{width:100%;height:220px;object-fit:cover;display:block}
 .card-body{padding:20px}
 .card h3{font-size:22px;font-weight:700;margin:0 0 8px}
 .card p{font-size:15px;color:#666;line-height:1.5;margin:0}
+.badge{position:absolute;top:15px;right:15px;background:#000;color:#fff;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700}
 #login{position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
 .login-box{text-align:center;width:100%;max-width:400px}
 .login-box h1{font-size:48px;margin-bottom:30px}
@@ -51,21 +52,20 @@ body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rob
 .modal-box h2{font-size:32px;margin-bottom:30px}
 .modal-box button{display:block;width:100%;padding:20px;font-size:18px;background:#000;color:#fff;border:none;border-radius:12px;cursor:pointer;font-weight:700;margin:10px 0}
 .count{position:fixed;bottom:20px;left:20px;background:#000;color:#fff;padding:10px 20px;border-radius:50px;font-weight:700;z-index:100}
-@media(prefers-color-scheme:dark){body{background:#000;color:#fff}.header p{color:#999}.card{background:#111}.card p{color:#999}#login{background:#000}.login-box input{background:#111;border-color:#333;color:#fff}.login-box button{background:#fff;color:#000}.admin{background:#111}.admin button{background:#fff;color:#000}.game-view{background:#000}.game-header{background:#fff;color:#000}.game-header button{background:#000;color:#fff}.craft-slot{background:#111;border-color:#fff;color:#fff}.craft-slot.active{background:#fff;color:#000}.craft-result{background:#111;border-color:#fff}.element{background:#111;border-color:#fff;color:#fff}.element:hover{background:#222}.modal-box{background:#111;color:#fff}.modal-box button{background:#fff;color:#000}.count{background:#fff;color:#000}}
+@media(prefers-color-scheme:dark){body{background:#000;color:#fff}.header p{color:#999}.card{background:#111}.card p{color:#999}.badge{background:#fff;color:#000}#login{background:#000}.login-box input{background:#111;border-color:#333;color:#fff}.login-box button{background:#fff;color:#000}.admin{background:#111}.admin button{background:#fff;color:#000}.game-view{background:#000}.game-header{background:#fff;color:#000}.game-header button{background:#000;color:#fff}.craft-slot{background:#111;border-color:#fff;color:#fff}.craft-slot.active{background:#fff;color:#000}.craft-result{background:#111;border-color:#fff}.element{background:#111;border-color:#fff;color:#fff}.element:hover{background:#222}.modal-box{background:#111;color:#fff}.modal-box button{background:#fff;color:#000}.count{background:#fff;color:#000}}
 </style>
 </head>
 <body>
 <div id="login">
 <div class="login-box">
-<h1>Biel Fun</h1>
+<h1>Biel.Fun</h1>
 <input type="text" id="nomeInput" placeholder="Seu nome" maxlength="20">
 <button onclick="entrar()">Entrar</button>
-</div>
 </div>
 <div id="admin" class="admin hidden">👑 <span id="userName"></span> | <span id="userScore">0</span> pts<button onclick="sair()">Sair</button></div>
 <div class="count hidden" id="countEl">0 elementos</div>
 <div class="container" id="hub">
-<div class="header"><h1>Biel Fun</h1><p>Experimentos interativos</p></div>
+<div class="header"><h1>Biel.Fun</h1><p>Experimentos interativos</p></div>
 <div class="grid" id="grid"></div>
 </div>
 <div id="modalEscolha" class="modal hidden">
@@ -74,7 +74,6 @@ body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rob
 <button onclick="abrirNealCraft()">Abrir Infinite Craft Neal</button>
 <button onclick="abrirBebelCraft()">Abrir Infinite Craft BebelDev</button>
 <button onclick="fecharModal()" style="background:#666">Cancelar</button>
-</div>
 </div>
 <div id="gameView" class="game-view hidden">
 <div class="game-header">
@@ -87,43 +86,40 @@ body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rob
 let user=JSON.parse(localStorage.getItem('bielUser')||'{"nome":"","score":0,"admin":false}');
 let elements=JSON.parse(localStorage.getItem('bielElements')||'[{"emoji":"💧","nome":"Água"},{"emoji":"🔥","nome":"Fogo"},{"emoji":"🌍","nome":"Terra"},{"emoji":"💨","nome":"Ar"}]');
 
-let baseCombos={
-'Água+Fogo':'Vapor','Fogo+Água':'Vapor','Água+Terra':'Lama','Terra+Água':'Lama','Fogo+Terra':'Lava','Terra+Fogo':'Lava','Ar+Fogo':'Energia','Fogo+Ar':'Energia','Ar+Terra':'Poeira','Terra+Ar':'Poeira','Ar+Água':'Nuvem','Água+Ar':'Nuvem','Lava+Água':'Pedra','Água+Lava':'Pedra','Nuvem+Nuvem':'Chuva','Pedra+Fogo':'Metal','Fogo+Pedra':'Metal','Metal+Energia':'Robô','Energia+Metal':'Robô','Robô+Robô':'BielDev','Chuva+Terra':'Flor','Terra+Chuva':'Flor','Lama+Lama':'Porco','Porco+Porco':'Fazenda','Fazenda+Lama':'Galinha Pintadinha','Lama+Fazenda':'Galinha Pintadinha','Porco+Lama':'Sítio','Lama+Porco':'Sítio','Robô+Metal':'Exterminador','Metal+Robô':'Exterminador','BielDev+BielDev':'BebelDev','Energia+Água':'Raio','Água+Energia':'Raio','Raio+Nuvem':'Tempestade','Nuvem+Raio':'Tempestade','Tempestade+Robô':'Sharknado','Robô+Tempestade':'Sharknado','Sharknado+Sharknado':'Tornado','Tornado+Tornado':'Furacão','Fogo+Robô':'Gundam','Robô+Fogo':'Gundam','Gundam+Energia':'EVA','Energia+Gundam':'EVA','Metal+Metal':'Aço','Aço+Aço':'Titânio','Titânio+Fogo':'Espada','Fogo+Titânio':'Espada','Espada+Robô':'Mech','Robô+Espada':'Mech','Lava+Metal':'Vulcão','Metal+Lava':'Vulcão','Vulcão+Água':'Ilha','Água+Vulcão':'Ilha','Ilha+Ilha':'Continente','Continente+Continente':'Planeta','Planeta+Planeta':'Galáxia','Terra+Flor':'Brasil','Flor+Terra':'Brasil','Brasil+Fogo':'Churrasco','Fogo+Brasil':'Churrasco','Churrasco+Porco':'Costela','Porco+Churrasco':'Costela','Água+Brasil':'Coco','Brasil+Água':'Coco','Coco+Coco':'Coqueiro','Coqueiro+Ilha':'Praia','Ilha+Coqueiro':'Praia','Praia+Praia':'Litoral','Litoral+Brasil':'Rio de Janeiro','Fogo+Porco':'Bacon','Porco+Fogo':'Bacon','Bacon+Bacon':'X-Bacon','X-Bacon+Pão':'Hambúrguer','Pão+X-Bacon':'Hambúrguer','Hambúrguer+Brasil':'X-Tudo','Brasil+Hambúrguer':'X-Tudo','Água+Terra':'Barro','Terra+Água':'Barro','Barro+Fogo':'Tijolo','Fogo+Barro':'Tijolo','Tijolo+Tijolo':'Casa','Casa+Casa':'Cidade','Robô+Energia':'IA','Energia+Robô':'IA','IA+IA':'Skynet','Skynet+Robô':'Exterminador 2','Robô+Skynet':'Exterminador 2','Metal+Aço':'Carro','Aço+Metal':'Carro','Carro+Carro':'Engarrafamento','Engarrafamento+Brasil':'São Paulo','Brasil+Engarrafamento':'São Paulo','IA+Brasil':'BebelDev 2','Brasil+IA':'BebelDev 2','Planeta+Fogo':'Sol','Fogo+Planeta':'Sol','Sol+Sol':'Estrela','Estrela+Estrela':'Constelação','Constelação+Galáxia':'Universo','Galáxia+Constelação':'Universo','Universo+Universo':'Multiverso','Multiverso+Multiverso':'Omniverso','Água+Água':'Oceano','Oceano+Oceano':'Mar','Mar+Mar':'Atlântico','Fogo+Fogo':'Inferno','Inferno+Inferno':'Diabo','Terra+Terra':'Montanha','Montanha+Montanha':'Cordilheira','Ar+Ar':'Vento','Vento+Vento':'Ciclone','Pedra+Pedra':'Rocha','Rocha+Rocha':'Montanha 2'
-};
+let baseCombos={'Água+Fogo':'Vapor','Fogo+Água':'Vapor','Água+Terra':'Lama','Terra+Água':'Lama','Fogo+Terra':'Lava','Terra+Fogo':'Lava','Ar+Fogo':'Energia','Fogo+Ar':'Energia','Ar+Terra':'Poeira','Terra+Ar':'Poeira','Ar+Água':'Nuvem','Água+Ar':'Nuvem','Lava+Água':'Pedra','Água+Lava':'Pedra','Nuvem+Nuvem':'Chuva','Pedra+Fogo':'Metal','Fogo+Pedra':'Metal','Metal+Energia':'Robô','Energia+Metal':'Robô','Robô+Robô':'BielDev','Chuva+Terra':'Flor','Terra+Chuva':'Flor','Lama+Lama':'Porco','Porco+Porco':'Fazenda','Fazenda+Lama':'Galinha Pintadinha','Lama+Fazenda':'Galinha Pintadinha','Porco+Lama':'Sítio','Lama+Porco':'Sítio','Robô+Metal':'Exterminador','Metal+Robô':'Exterminador','BielDev+BielDev':'BebelDev','Energia+Água':'Raio','Água+Energia':'Raio','Raio+Nuvem':'Tempestade','Nuvem+Raio':'Tempestade','Tempestade+Robô':'Sharknado','Robô+Tempestade':'Sharknado','Sharknado+Sharknado':'Tornado','Tornado+Tornado':'Furacão','Fogo+Robô':'Gundam','Robô+Fogo':'Gundam','Gundam+Energia':'EVA','Energia+Gundam':'EVA','Metal+Metal':'Aço','Aço+Aço':'Titânio','Titânio+Fogo':'Espada','Fogo+Titânio':'Espada','Espada+Robô':'Mech','Robô+Espada':'Mech','Lava+Metal':'Vulcão','Metal+Lava':'Vulcão','Vulcão+Água':'Ilha','Água+Vulcão':'Ilha','Ilha+Ilha':'Continente','Continente+Continente':'Planeta','Planeta+Planeta':'Galáxia','Terra+Flor':'Brasil','Flor+Terra':'Brasil','Brasil+Fogo':'Churrasco','Fogo+Brasil':'Churrasco','Churrasco+Porco':'Costela','Porco+Churrasco':'Costela','Água+Brasil':'Coco','Brasil+Água':'Coco','Coco+Coco':'Coqueiro','Coqueiro+Ilha':'Praia','Ilha+Coqueiro':'Praia','Praia+Praia':'Litoral','Litoral+Brasil':'Rio de Janeiro','Fogo+Porco':'Bacon','Porco+Fogo':'Bacon','Bacon+Bacon':'X-Bacon','X-Bacon+Pão':'Hambúrguer','Pão+X-Bacon':'Hambúrguer','Hambúrguer+Brasil':'X-Tudo','Brasil+Hambúrguer':'X-Tudo','Água+Terra':'Barro','Terra+Água':'Barro','Barro+Fogo':'Tijolo','Fogo+Barro':'Tijolo','Tijolo+Tijolo':'Casa','Casa+Casa':'Cidade','Robô+Energia':'IA','Energia+Robô':'IA','IA+IA':'Skynet','Skynet+Robô':'Exterminador 2','Robô+Skynet':'Exterminador 2','Metal+Aço':'Carro','Aço+Metal':'Carro','Carro+Carro':'Engarrafamento','Engarrafamento+Brasil':'São Paulo','Brasil+Engarrafamento':'São Paulo','IA+Brasil':'BebelDev 2','Brasil+IA':'BebelDev 2','Planeta+Fogo':'Sol','Fogo+Planeta':'Sol','Sol+Sol':'Estrela','Estrela+Estrela':'Constelação','Constelação+Galáxia':'Universo','Galáxia+Constelação':'Universo','Universo+Universo':'Multiverso','Multiverso+Multiverso':'Omniverso','Água+Água':'Oceano','Oceano+Oceano':'Mar','Mar+Mar':'Atlântico','Fogo+Fogo':'Inferno','Inferno+Inferno':'Diabo','Terra+Terra':'Montanha','Montanha+Montanha':'Cordilheira','Ar+Ar':'Vento','Vento+Vento':'Ciclone','Pedra+Pedra':'Rocha','Rocha+Rocha':'Montanha 2'};
 
-let baseEmoji={
-'Vapor':'💨','Lama':'💩','Lava':'🌋','Energia':'⚡','Poeira':'🌪️','Nuvem':'☁️','Pedra':'🪨','Chuva':'🌧️','Metal':'⚙️','Robô':'🤖','BielDev':'👑','Flor':'🌸','Porco':'🐷','Fazenda':'🚜','Galinha Pintadinha':'🐔','Sítio':'🏡','Exterminador':'🦾','BebelDev':'👑','Raio':'⚡','Tempestade':'🌩️','Sharknado':'🦈','Tornado':'🌪️','Furacão':'🌀','Gundam':'🤖','EVA':'🤖','Aço':'🔩','Titânio':'🛡️','Espada':'⚔️','Mech':'🦾','Vulcão':'🌋','Ilha':'🏝️','Continente':'🌍','Planeta':'🪐','Galáxia':'🌌','Brasil':'🇧🇷','Churrasco':'🥩','Costela':'🍖','Coco':'🥥','Coqueiro':'🌴','Praia':'🏖️','Litoral':'🌊','Rio de Janeiro':'🏙️','Bacon':'🥓','X-Bacon':'🍔','Hambúrguer':'🍔','X-Tudo':'🍔','Barro':'🪨','Tijolo':'🧱','Casa':'🏠','Cidade':'🏙️','IA':'🤖','Skynet':'🤖','Exterminador 2':'🦾','Carro':'🚗','Engarrafamento':'🚦','São Paulo':'🏙️','BebelDev 2':'👑','Sol':'☀️','Estrela':'⭐','Constelação':'✨','Universo':'🌌','Multiverso':'🌀','Omniverso':'💫','Oceano':'🌊','Mar':'🌊','Atlântico':'🌊','Inferno':'🔥','Diabo':'😈','Montanha':'⛰️','Cordilheira':'🏔️','Vento':'💨','Ciclone':'🌀','Rocha':'🪨','Montanha 2':'⛰️'
-};
+let baseEmoji={'Vapor':'💨','Lama':'💩','Lava':'🌋','Energia':'⚡','Poeira':'🌪️','Nuvem':'☁️','Pedra':'🪨','Chuva':'🌧️','Metal':'⚙️','Robô':'🤖','BielDev':'👑','Flor':'🌸','Porco':'🐷','Fazenda':'🚜','Galinha Pintadinha':'🐔','Sítio':'🏡','Exterminador':'🦾','BebelDev':'👑','Raio':'⚡','Tempestade':'🌩️','Sharknado':'🦈','Tornado':'🌪️','Furacão':'🌀','Gundam':'🤖','EVA':'🤖','Aço':'🔩','Titânio':'🛡️','Espada':'⚔️','Mech':'🦾','Vulcão':'🌋','Ilha':'🏝️','Continente':'🌍','Planeta':'🪐','Galáxia':'🌌','Brasil':'🇧🇷','Churrasco':'🥩','Costela':'🍖','Coco':'🥥','Coqueiro':'🌴','Praia':'🏖️','Litoral':'🌊','Rio de Janeiro':'🏙️','Bacon':'🥓','X-Bacon':'🍔','Hambúrguer':'🍔','X-Tudo':'🍔','Barro':'🪨','Tijolo':'🧱','Casa':'🏠','Cidade':'🏙️','IA':'🤖','Skynet':'🤖','Exterminador 2':'🦾','Carro':'🚗','Engarrafamento':'🚦','São Paulo':'🏙️','BebelDev 2':'👑','Sol':'☀️','Estrela':'⭐','Constelação':'✨','Universo':'🌌','Multiverso':'🌀','Omniverso':'💫','Oceano':'🌊','Mar':'🌊','Atlântico':'🌊','Inferno':'🔥','Diabo':'😈','Montanha':'⛰️','Cordilheira':'🏔️','Vento':'💨','Ciclone':'🌀','Rocha':'🪨','Montanha 2':'⛰️'};
 
 let selectedSlot=0,slots=[null,null];
 
-// SÓ JOGOS QUE LIBERAM IFRAME - TESTADOS
 const jogos=[
-{n:"Infinite Craft",d:"Combine elementos pra criar tudo que existe",i:"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",u:"craft"},
-{n:"Draw a Perfect Circle",d:"Consegue desenhar um círculo perfeito?",i:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop",u:"https://neal.fun/perfect-circle/"},
-{n:"Spend Bill Gates' Money",d:"Gaste 100 bilhões de dólares",i:"https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=600&fit=crop",u:"https://neal.fun/spend/"},
-{n:"The Auction Game",d:"Dê lances em pinturas malucas",i:"https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&h=600&fit=crop",u:"https://neal.fun/auction-game/"},
-{n:"Life Stats",d:"Estatísticas da tua vida",i:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop",u:"https://neal.fun/life-stats/"},
-{n:"Who Was Alive?",d:"Quem tava vivo quando tu nasceu?",i:"https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=800&h=600&fit=crop",u:"https://neal.fun/who-was-alive/"},
-{n:"Where does the day go?",d:"Pra onde vai teu tempo",i:"https://images.unsplash.com/photo-1501139083538-0139583c060f?w=800&h=600&fit=crop",u:"https://neal.fun/where-does-the-day-go/"},
-{n:"Paper",d:"Dobra papel infinitamente",i:"https://images.unsplash.com/photo-1583484963886-cfe2bff2945f?w=800&h=600&fit=crop",u:"https://neal.fun/paper/"},
-{n:"Sell Sell Sell",d:"Vende pixels",i:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",u:"https://neal.fun/sell-sell-sell/"}
+{n:"Infinite Craft",d:"Combine elementos pra criar tudo que existe",i:"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",u:"craft",iframe:false},
+{n:"Draw a Perfect Circle",d:"Consegue desenhar um círculo perfeito?",i:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop",u:"https://neal.fun/perfect-circle/",iframe:true},
+{n:"Spend Bill Gates' Money",d:"Gaste 100 bilhões de dólares",i:"https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=600&fit=crop",u:"https://neal.fun/spend/",iframe:true},
+{n:"Life Stats",d:"Estatísticas da tua vida",i:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop",u:"https://neal.fun/life-stats/",iframe:true},
+{n:"Who Was Alive?",d:"Quem tava vivo quando tu nasceu?",i:"https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=800&h=600&fit=crop",u:"https://neal.fun/who-was-alive/",iframe:true},
+{n:"The Auction Game",d:"Dê lances em pinturas malucas",i:"https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&h=600&fit=crop",u:"https://neal.fun/auction-game/",iframe:false},
+{n:"Asteroid Launcher",d:"Lance asteroides na Terra",i:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop",u:"https://neal.fun/asteroid-launcher/",iframe:false},
+{n:"The Password Game",d:"Crie uma senha impossível",i:"https://images.unsplash.com/photo-1614064641938-3bbee52942c5?w=800&h=600&fit=crop",u:"https://neal.fun/password-game/",iframe:false}
 ];
 
 document.getElementById('nomeInput').addEventListener('keypress',function(e){if(e.key==='Enter')entrar();});
 
 function init(){if(user.nome){document.getElementById('login').classList.add('hidden');document.getElementById('admin').classList.remove('hidden');document.getElementById('countEl').classList.remove('hidden');document.getElementById('userName').textContent=user.nome;document.getElementById('userScore').textContent=user.score;updateCount()}renderGrid()}
 function updateCount(){document.getElementById('countEl').textContent=elements.length+' elementos'}
-function renderGrid(){document.getElementById('grid').innerHTML=jogos.map(j=>`<div class="card" onclick="abrir('${j.u}','${j.n}')"><img src="${j.i}" alt="${j.n}"><div class="card-body"><h3>${j.n}</h3><p>${j.d}</p></div></div>`).join('')}
+function renderGrid(){document.getElementById('grid').innerHTML=jogos.map(j=>`<div class="card" onclick="abrir('${j.u}','${j.n}',${j.iframe})"><div class="badge">${j.iframe?'Iframe':'Nova aba'}</div><img src="${j.i}" alt="${j.n}"><div class="card-body"><h3>${j.n}</h3><p>${j.d}</p></div></div>`).join('')}
 function entrar(){let nome=document.getElementById('nomeInput').value.trim();if(!nome){alert('Digita um nome!');return}user={nome:nome,score:0,admin:nome==='BebelDev👑'};localStorage.setItem('bielUser',JSON.stringify(user));document.getElementById('login').classList.add('hidden');document.getElementById('admin').classList.remove('hidden');document.getElementById('countEl').classList.remove('hidden');document.getElementById('userName').textContent=user.nome;document.getElementById('userScore').textContent=user.score;updateCount();renderGrid()}
 function sair(){localStorage.removeItem('bielUser');location.reload()}
 
-function abrir(url,nome){
+function abrir(url,nome,useIframe){
+addPonto();
 if(url==='craft'){
 if(user.admin){document.getElementById('modalEscolha').classList.remove('hidden')}
-else{abrirIframe('https://neal.fun/infinite-craft/','Infinite Craft');addPonto()}
+else{window.open('https://neal.fun/infinite-craft/','_blank')}
+}else if(useIframe){
+abrirIframe(url,nome);
 }else{
-abrirIframe(url,nome);addPonto()
+window.open(url,'_blank');
 }
 }
 
@@ -133,7 +129,7 @@ document.getElementById('gameTitle').textContent=nome;
 document.getElementById('gameContent').innerHTML=`<iframe src="${url}" class="game-iframe" allow="fullscreen"></iframe>`;
 }
 
-function abrirNealCraft(){abrirIframe('https://neal.fun/infinite-craft/','Infinite Craft');fecharModal();addPonto()}
+function abrirNealCraft(){window.open('https://neal.fun/infinite-craft/','_blank');fecharModal();addPonto()}
 function abrirBebelCraft(){document.getElementById('gameView').classList.remove('hidden');document.getElementById('gameTitle').textContent='Infinite Craft BebelDev';fecharModal();renderCraft();addPonto()}
 function fecharModal(){document.getElementById('modalEscolha').classList.add('hidden')}
 function addPonto(){user.score+=10;localStorage.setItem('bielUser',JSON.stringify(user));document.getElementById('userScore').textContent=user.score}
