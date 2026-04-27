@@ -92,6 +92,7 @@ let baseEmoji={'Vapor':'💨','Lama':'💩','Lava':'🌋','Energia':'⚡','Poeir
 
 let selectedSlot=0,slots=[null,null];
 
+// SÓ OS 4 QUE LIBERAM IFRAME = true. RESTO = false
 const jogos=[
 {n:"Infinite Craft",d:"Combine elementos pra criar tudo que existe",i:"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",u:"craft",iframe:false},
 {n:"Draw a Perfect Circle",d:"Consegue desenhar um círculo perfeito?",i:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop",u:"https://neal.fun/perfect-circle/",iframe:true},
@@ -117,16 +118,12 @@ if(url==='craft'){
 if(user.admin){document.getElementById('modalEscolha').classList.remove('hidden')}
 else{window.open('https://neal.fun/infinite-craft/','_blank')}
 }else if(useIframe){
-abrirIframe(url,nome);
-}else{
-window.open(url,'_blank');
-}
-}
-
-function abrirIframe(url,nome){
 document.getElementById('gameView').classList.remove('hidden');
 document.getElementById('gameTitle').textContent=nome;
 document.getElementById('gameContent').innerHTML=`<iframe src="${url}" class="game-iframe" allow="fullscreen"></iframe>`;
+}else{
+window.open(url,'_blank');
+}
 }
 
 function abrirNealCraft(){window.open('https://neal.fun/infinite-craft/','_blank');fecharModal();addPonto()}
