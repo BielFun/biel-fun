@@ -21,7 +21,6 @@ body{background:#05050a;color:#fff;font-family:Arial,sans-serif;touch-action:man
 .voltar:active{background:#333}
 .jogo{padding-top:50px;text-align:center}
 .jogo h1{font-size:26px;margin:12px 0;color:#00d9ff}
-.jogo h2{font-size:22px;margin:10px 0}
 .info{color:#999;margin:10px 0;font-size:14px}
 .btn{background:#00d9ff;color:#000;border:none;padding:12px 24px;border-radius:22px;font-weight:800;font-size:15px;margin:8px;cursor:pointer}
 .btn:active{transform:scale(0.95)}
@@ -40,8 +39,6 @@ canvas{background:#0f0f18;display:block;margin:10px auto;border:2px solid #222;b
 </style>
 </head>
 <body>
-
-<!-- MENU -->
 <div id="menu" class="tela ativa">
 <div class="menu">
 <h1>Biel.Fun</h1>
@@ -49,210 +46,49 @@ canvas{background:#0f0f18;display:block;margin:10px auto;border:2px solid #222;b
 <div class="grid" id="gridMenu"></div>
 </div>
 </div>
-
-<!-- CONTAINER DOS JOGOS -->
 <div id="containerJogos"></div>
-
 <script>
-const jogos=[
-{n:"Biel Clicker",id:"clicker",emoji:"👑"},
-{n:"Adivinha Biel",id:"adivinha",emoji:"🎯"},
-{n:"Biel Snake",id:"snake",emoji:"🐍"},
-{n:"Biel Flappy",id:"flappy",emoji:"🐦"},
-{n:"Biel Memory",id:"memoria",emoji:"🧠"},
-{n:"Biel Dado",id:"dado",emoji:"🎲"},
-{n:"Biel Math",id:"math",emoji:"➕"},
-{n:"Biel Reflexo",id:"reflexo",emoji:"⚡"},
-{n:"Biel 2048",id:"2048",emoji:"🔢"},
-{n:"Biel Pong",id:"pong",emoji:"🏓"},
-{n:"Biel Breakout",id:"breakout",emoji:"🧱"},
-{n:"Biel Quiz",id:"quiz",emoji:"❓"},
-{n:"Biel TicTac",id:"velha",emoji:"⭕"},
-{n:"Biel Simon",id:"simon",emoji:"🎨"},
-{n:"Biel Dino",id:"dino",emoji:"🦖"},
-{n:"Biel Space",id:"space",emoji:"🚀"},
-{n:"Biel Catch",id:"catch",emoji:"🍎"},
-{n:"Biel Puzzle",id:"puzzle",emoji:"🧩"},
-{n:"Biel Color",id:"color",emoji:"🌈"},
-{n:"Biel Tap",id:"tap",emoji:"👆"}
-];
-
-// GERAR MENU
-jogos.forEach((j,i)=>{
-document.getElementById('gridMenu').innerHTML+=`<div class="card" onclick="abrir('${j.id}')"><h2>${j.emoji} ${j.n}</h2><p>Jogo ${i+1}</p></div>`
-});
-
-// GERAR TELAS
-jogos.forEach(j=>{
-document.getElementById('containerJogos').innerHTML+=`<div id="${j.id}" class="tela"><button class="voltar" onclick="voltar()">← Menu</button><div class="jogo" id="jogo_${j.id}"></div></div>`
-});
-
-// NAVEGAÇÃO
-let jogoAtivo=null;
-function abrir(id){
-document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
-document.getElementById(id).classList.add('ativa');
-jogoAtivo=id;
-iniciarJogo(id)
-}
-function voltar(){
-if(window.pararJogo)window.pararJogo();
-document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
-document.getElementById('menu').classList.add('ativa');
-jogoAtivo=null;
-}
-
-// INICIAR JOGOS
-function iniciarJogo(id){
-const div=document.getElementById('jogo_'+id);
-if(div.dataset.ini)return;
-div.dataset.ini=1;
-if(id=='clicker')jogoClicker(div);
-if(id=='adivinha')jogoAdivinha(div);
-if(id=='snake')jogoSnake(div);
-if(id=='flappy')jogoFlappy(div);
-if(id=='memoria')jogoMemoria(div);
-if(id=='dado')jogoDado(div);
-if(id=='math')jogoMath(div);
-if(id=='reflexo')jogoReflexo(div);
-if(id=='2048')jogo2048(div);
-if(id=='pong')jogoPong(div);
-if(id=='breakout')jogoBreakout(div);
-if(id=='quiz')jogoQuiz(div);
-if(id=='velha')jogoVelha(div);
-if(id=='simon')jogoSimon(div);
-if(id=='dino')jogoDino(div);
-if(id=='space')jogoSpace(div);
-if(id=='catch')jogoCatch(div);
-if(id=='puzzle')jogoPuzzle(div);
-if(id=='color')jogoColor(div);
-if(id=='tap')jogoTap(div);
-}
-
-// 1. CLICKER
-function jogoClicker(div){
-let c=+localStorage.getItem('bielCoins')||0,p=+localStorage.getItem('bielPC')||1,cu=+localStorage.getItem('bielCusto')||50;
-div.innerHTML=`<h1 id="coins">${c} BielCoins</h1><div class="moeda" onclick="clicarClicker()">👑</div><p class="info" id="pc">${p} por clique</p><button class="btn" onclick="upClicker()">Upgrade - <span id="cu">${cu}</span></button>`;
-window.clicarClicker=()=>{c+=p;atualizarClicker()}
-window.upClicker=()=>{if(c>=cu){c-=cu;p++;cu=Math.floor(cu*1.8);atualizarClicker()}}
-function atualizarClicker(){div.querySelector('#coins').innerText=c+' BielCoins';div.querySelector('#pc').innerText=p+' por clique';div.querySelector('#cu').innerText=cu;localStorage.setItem('bielCoins',c);localStorage.setItem('bielPC',p);localStorage.setItem('bielCusto',cu)}
-}
-
-// 2. ADIVINHA
-function jogoAdivinha(div){
-let n=Math.floor(Math.random()*100)+1,t=0,r=+localStorage.getItem('bielRec')||0;
-div.innerHTML=`<h1>Adivinha Biel</h1><p class="info">1 a 100</p><input type="number" id="ch" placeholder="Chute" min="1" max="100"><br><button class="btn" onclick="tentarAdivinha()">Tentar</button><p id="dc" style="font-size:22px;margin:15px;color:#00ff88;min-height:30px"></p><p class="info">Tentativas: <span id="tt">0</span> | Recorde: <span id="rc">${r||'-'}</span></p>`;
-window.tentarAdivinha=()=>{let c=+div.querySelector('#ch').value;if(!c||c<1||c>100)return;t++;div.querySelector('#tt').innerText=t;if(c==n){div.querySelector('#dc').innerText='ACERTOU EM '+t+'!';if(!r||t<r){r=t;localStorage.setItem('bielRec',r);div.querySelector('#rc').innerText=r}setTimeout(()=>{n=Math.floor(Math.random()*100)+1;t=0;div.querySelector('#tt').innerText=0;div.querySelector('#dc').innerText='Novo número!';div.querySelector('#ch').value=''},2000)}else if(c<n){div.querySelector('#dc').innerText='MAIOR 📈'}else{div.querySelector('#dc').innerText='MENOR 📉'}div.querySelector('#ch').value=''}
-}
-
-// 3. SNAKE ARRUMADO - AGORA FUNCIONA 100%
-function jogoSnake(div){
-div.innerHTML=`<h1>Biel Snake</h1><div class="info">Pontos: <span id="pts">0</span> | Recorde: <span id="rs">${+localStorage.getItem('snakeRec')||0}</span></div><canvas id="cv" width="280" height="280"></canvas><div class="controles"><div class="vazio"></div><div class="btn-seta" id="cima">⬆️</div><div class="vazio"></div><div class="btn-seta" id="esq">⬅️</div><div class="btn-seta" id="pause">⏸️</div><div class="btn-seta" id="dir">➡️</div><div class="vazio"></div><div class="btn-seta" id="baixo">⬇️</div><div class="vazio"></div></div>`;
-const cv=div.querySelector('#cv'),ctx=cv.getContext('2d'),g=14,s=cv.width/g;
-let co=[{x:7,y:7}],dr={x:1,y:0},fo=nf(),pt=0,rs=+localStorage.getItem('snakeRec')||0,pa=false,ve=120,loopId=null;
-function nf(){let f;do{f={x:Math.floor(Math.random()*g),y:Math.floor(Math.random()*g)}}while(co.some(c=>c.x==f.x&&c.y==f.y));return f}
-// CONTROLES ARRUMADOS
-function mudarDir(x,y){if(pa)return;if(dr.x==-x&&dr.y==-y)return;dr={x,y}}
-div.querySelector('#cima').onclick=()=>mudarDir(0,-1);
-div.querySelector('#baixo').onclick=()=>mudarDir(0,1);
-div.querySelector('#esq').onclick=()=>mudarDir(-1,0);
-div.querySelector('#dir').onclick=()=>mudarDir(1,0);
-div.querySelector('#pause').onclick=()=>{pa=!pa};
-function l(){if(jogoAtivo!='snake'){cancelAnimationFrame(loopId);return}if(pa){loopId=requestAnimationFrame(l);return}let h={x:co[0].x+dr.x,y:co[0].y+dr.y};if(h.x<0||h.x>=g||h.y<0||h.y>=g||co.some(c=>c.x==h.x&&c.y==h.y)){if(pt>rs){rs=pt;localStorage.setItem('snakeRec',rs);div.querySelector('#rs').innerText=rs}co=[{x:7,y:7}];dr={x:1,y:0};pt=0;fo=nf();ve=120}else{co.unshift(h);if(h.x==fo.x&&h.y==fo.y){pt+=10;fo=nf();if(ve>60)ve-=2}else{co.pop()}}ctx.fillStyle='#0f0f18';ctx.fillRect(0,0,cv.width,cv.height);ctx.fillStyle='#ff3333';ctx.fillRect(fo.x*s+3,fo.y*s+3,s-6,s-6);co.forEach((c,i)=>{ctx.fillStyle=i==0?'#00ff00':'#00cc00';ctx.fillRect(c.x*s+1,c.y*s+1,s-2,s-2)});div.querySelector('#pts').innerText=pt;setTimeout(()=>{loopId=requestAnimationFrame(l)},ve)}
-window.pararJogo=()=>{cancelAnimationFrame(loopId)};
-l();
-}
-
-// 4. FLAPPY
-function jogoFlappy(div){
-div.innerHTML=`<h1>Biel Flappy</h1><p class="info">Pontos: <span id="pf">0</span> | Recorde: <span id="rf">${+localStorage.getItem('flappyRec')||0}</span></p><canvas id="cvf" width="280" height="400"></canvas><p class="info">Toque pra pular</p>`;
-const cv=div.querySelector('#cvf'),ctx=cv.getContext('2d');let b={x:50,y:200,v:0},p=[],pt=0,rf=+localStorage.getItem('flappyRec')||0,rodando=true;
-cv.onclick=()=>{b.v=-7};
-function l(){if(jogoAtivo!='flappy'){rodando=false;return}ctx.fillStyle='#87CEEB';ctx.fillRect(0,0,280,400);b.v+=0.5;b.y+=b.v;if(b.y>380||b.y<0){if(pt>rf){rf=pt;localStorage.setItem('flappyRec',rf);div.querySelector('#rf').innerText=rf}b={x:50,y:200,v:0};p=[];pt=0}if(p.length==0||p[p.length-1].x<150){p.push({x:280,h:Math.random()*200+50})}p.forEach((o,i)=>{o.x-=3;ctx.fillStyle='#00aa00';ctx.fillRect(o.x,0,50,o.h);ctx.fillRect(o.x,o.h+120,50,400);if(b.x>o.x&&b.x<o.x+50&&(b.y<o.h||b.y>o.h+120)){if(pt>rf){rf=pt;localStorage.setItem('flappyRec',rf);div.querySelector('#rf').innerText=rf}b={x:50,y:200,v:0};p=[];pt=0}if(o.x==50)pt++});ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(b.x,b.y,15,0,7);ctx.fill();div.querySelector('#pf').innerText=pt;if(rodando)requestAnimationFrame(l)}
-l()
-}
-
-// 5. MEMORIA
-function jogoMemoria(div){
-let s=[],j=[],p=0,r=+localStorage.getItem('memRec')||0;
-div.innerHTML=`<h1>Biel Memory</h1><p class="info">Pontos: <span id="pm">${p}</span> | Recorde: <span id="rm">${r}</span></p><div id="mem"></div><button class="btn" onclick="novaSeq()">Nova Sequência</button>`;
-window.novaSeq=()=>{s.push(Math.floor(Math.random()*4));j=[];mostrarSeq()}
-function mostrarSeq(){let i=0;const int=setInterval(()=>{if(i>=s.length){clearInterval(int);return}const c=['vermelho','azul','verde','amarelo'][s[i]];const el=div.querySelector('.'+c);el.style.opacity='0.3';setTimeout(()=>el.style.opacity='1',300);i++},600)}
-div.querySelector('#mem').innerHTML='<div class="cor vermelho" onclick="clickCorMem(0)"></div><div class="cor azul" onclick="clickCorMem(1)"></div><div class="cor verde" onclick="clickCorMem(2)"></div><div class="cor amarelo" onclick="clickCorMem(3)"></div>';
-window.clickCorMem=(c)=>{j.push(c);if(j[j.length-1]!=s[j.length-1]){if(p>r){r=p;localStorage.setItem('memRec',r);div.querySelector('#rm').innerText=r}p=0;s=[];div.querySelector('#pm').innerText=0;alert('Errou!')}else if(j.length==s.length){p++;div.querySelector('#pm').innerText=p;setTimeout(()=>{j=[];s.push(Math.floor(Math.random()*4));mostrarSeq()},1000)}}
-}
-
-// 6. DADO
-function jogoDado(div){
-let r=+localStorage.getItem('dadoRec')||0;
-div.innerHTML=`<h1>Biel Dado</h1><div class="dado" id="dd">🎲</div><p class="info">Último: <span id="ud">-</span> | Maior: <span id="rd">${r}</span></p><button class="btn" onclick="rolarDado()">Rolar Dado</button>`;
-window.rolarDado=()=>{const n=Math.floor(Math.random()*6)+1;div.querySelector('#dd').innerText=['⚀','⚁','⚂','⚃','⚄','⚅'][n-1];div.querySelector('#ud').innerText=n;if(n>r){r=n;localStorage.setItem('dadoRec',r);div.querySelector('#rd').innerText=r}}
-}
-
-// 7. MATH
-function jogoMath(div){
-let p=0,r=+localStorage.getItem('mathRec')||0,a=0,b=0,op='+',res=0;
-div.innerHTML=`<h1>Biel Math</h1><p class="info">Pontos: <span id="pmt">${p}</span> | Recorde: <span id="rmt">${r}</span></p><h2 id="perg"></h2><input type="number" id="resp" placeholder="Resposta"><br><button class="btn" onclick="verificarMath()">Verificar</button>`;
-window.verificarMath=()=>{const r=+div.querySelector('#resp').value;if(r==res){p++;if(p>r){r=p;localStorage.setItem('mathRec',r);div.querySelector('#rmt').innerText=r}div.querySelector('#pmt').innerText=p;novaPergMath()}else{p=0;div.querySelector('#pmt').innerText=0;alert('Errou!')}div.querySelector('#resp').value=''}
-function novaPergMath(){a=Math.floor(Math.random()*20)+1;b=Math.floor(Math.random()*20)+1;op=['+','-','x'][Math.floor(Math.random()*3)];res=op=='+'?a+b:op=='-'?a-b:a*b;div.querySelector('#perg').innerText=`${a} ${op} ${b} =?`}
-novaPergMath()
-}
-
-// 8. REFLEXO
-function jogoReflexo(div){
-let t=0,ini=0,r=+localStorage.getItem('reflexRec')||9999;
-div.innerHTML=`<h1>Biel Reflexo</h1><p class="info">Melhor: <span id="rr">${r==9999?'-':r+'ms'}</span></p><div id="area" style="width:250px;height:250px;background:#333;margin:20px auto;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer">Clique pra começar</div><p id="tr" class="info"></p>`;
-div.querySelector('#area').onclick=()=>{if(t==0){div.querySelector('#area').style.background='#333';div.querySelector('#area').innerText='Espere...';t=1;setTimeout(()=>{div.querySelector('#area').style.background='#00ff88';div.querySelector('#area').innerText='CLIQUE!';ini=Date.now();t=2},Math.random()*3000+1000)}else if(t==2){const ms=Date.now()-ini;div.querySelector('#tr').innerText=ms+'ms';if(ms<r){r=ms;localStorage.setItem('reflexRec',r);div.querySelector('#rr').innerText=r+'ms'}t=0;div.querySelector('#area').innerText='Clique pra começar'}else{t=0;div.querySelector('#area').innerText='Muito cedo!';div.querySelector('#area').style.background='#ff006e'}}
-}
-
-// 9. 2048
-function jogo2048(div){
-let g=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],p=0,r=+localStorage.getItem('2048Rec')||0;
-div.innerHTML=`<h1>Biel 2048</h1><p class="info">Pontos: <span id="p2">0</span> | Recorde: <span id="r2">${r}</span></p><canvas id="cv2" width="280" height="280"></canvas><div class="controles"><div class="vazio"></div><div class="btn-seta" onclick="m2048(0,-1)">⬆️</div><div class="vazio"></div><div class="btn-seta" onclick="m2048(-1,0)">⬅️</div><div class="vazio"></div><div class="btn-seta" onclick="m2048(1,0)">➡️</div><div class="vazio"></div><div class="btn-seta" onclick="m2048(0,1)">⬇️</div><div class="vazio"></div></div>`;
-const cv=div.querySelector('#cv2'),ctx=cv.getContext('2d');
-function add(){let e=[];for(let i=0;i<4;i++)for(let j=0;j<4;j++)if(g[i][j]==0)e.push([i,j]);if(e.length){let [i,j]=e[Math.floor(Math.random()*e.length)];g[i][j]=Math.random()<0.9?2:4}}
-function draw(){ctx.fillStyle='#111';ctx.fillRect(0,0,280,280);for(let i=0;i<4;i++)for(let j=0;j<4;j++){if(g[i][j]){ctx.fillStyle='#00d9ff';ctx.fillRect(j*70+5,i*70+5,60,60);ctx.fillStyle='#000';ctx.font='bold 24px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(g[i][j],j*70+35,i*70+35)}}}
-window.m2048=(dx,dy)=>{let mv=false,ng=g.map(r=>[...r]);if(dx){for(let i=0;i<4;i++){let r=ng[i].filter(x=>x);for(let j=0;j<r.length-1;j++)if(r[j]==r[j+1]){r[j]*=2;p+=r[j];r.splice(j+1,1)}while(r.length<4)r.push(0);if(dx<0)ng[i]=r;else ng[i]=r.reverse()}mv=true}if(dy){for(let j=0;j<4;j++){let c=ng.map(r=>r[j]).filter(x=>x);for(let i=0;i<c.length-1;i++)if(c[i]==c[i+1]){c[i]*=2;p+=c[i];c.splice(i+1,1)}while(c.length<4)c.push(0);if(dy<0)for(let i=0;i<4;i++)ng[i][j]=c[i];else for(let i=0;i<4;i++)ng[i][j]=c[3-i]}mv=true}if(mv){g=ng;add();draw();div.querySelector('#p2').innerText=p;if(p>r){r=p;localStorage.setItem('2048Rec',r);div.querySelector('#r2').innerText=r}}}
-add();add();draw()
-}
-
-// 10. PONG
-function jogoPong(div){
-div.innerHTML=`<h1>Biel Pong</h1><p class="info">Pontos: <span id="pp">0</span> | Recorde: <span id="rp">${+localStorage.getItem('pongRec')||0}</span></p><canvas id="cvp" width="280" height="400"></canvas><p class="info">Arraste pra mover</p>`;
-const cv=div.querySelector('#cvp'),ctx=cv.getContext('2d');let b={x:140,y:200,vx:3,vy:3},p={x:110,y:370,w:60},pt=0,rp=+localStorage.getItem('pongRec')||0,rodando=true;
-cv.ontouchmove=cv.onmousemove=(e)=>{const r=cv.getBoundingClientRect();const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;p.x=Math.max(0,Math.min(220,x-p.w/2))};
-function l(){if(jogoAtivo!='pong'){rodando=false;return}ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,280,400);b.x+=b.vx;b.y+=b.vy;if(b.x<10||b.x>270)b.vx*=-1;if(b.y<10)b.vy*=-1;if(b.y>360&&b.x>p.x&&b.x<p.x+p.w){b.vy*=-1;pt++;div.querySelector('#pp').innerText=pt;if(pt>rp){rp=pt;localStorage.setItem('pongRec',rp);div.querySelector('#rp').innerText=rp}}if(b.y>400){b={x:140,y:200,vx:3,vy:3};pt=0;div.querySelector('#pp').innerText=0}ctx.fillStyle='#00d9ff';ctx.beginPath();ctx.arc(b.x,b.y,10,0,7);ctx.fill();ctx.fillRect(p.x,p.y,p.w,10);if(rodando)requestAnimationFrame(l)}
-l()
-}
-
-// 11-20: JOGOS SIMPLES RESTANTES
-function jogoBreakout(div){div.innerHTML=`<h1>Biel Breakout</h1><p class="info">Quebre todos os blocos!</p><canvas id="cvb" width="280" height="400"></canvas>`;const cv=div.querySelector('#cvb'),ctx=cv.getContext('2d');let b={x:140,y:300,vx:3,vy:-3},p={x:110,y:380,w:60},bl=[],rodando=true;for(let i=0;i<5;i++)for(let j=0;j<7;j++)bl.push({x:j*40+5,y:i*20+30,w:35,h:15});cv.ontouchmove=cv.onmousemove=(e)=>{const r=cv.getBoundingClientRect();p.x=Math.max(0,Math.min(220,(e.touches?e.touches[0].clientX:e.clientX)-r.left-p.w/2))};function l(){if(jogoAtivo!='breakout'){rodando=false;return}ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,280,400);b.x+=b.vx;b.y+=b.vy;if(b.x<5||b.x>275)b.vx*=-1;if(b.y<5)b.vy*=-1;if(b.y>370&&b.x>p.x&&b.x<p.x+p.w)b.vy*=-1;if(b.y>400){b={x:140,y:300,vx:3,vy:-3}}bl=bl.filter(t=>{if(b.x>t.x&&b.x<t.x+t.w&&b.y>t.y&&b.y<t.y+t.h){b.vy*=-1;return false}return true});ctx.fillStyle='#00d9ff';ctx.beginPath();ctx.arc(b.x,b.y,8,0,7);ctx.fill();ctx.fillRect(p.x,p.y,p.w,8);ctx.fillStyle='#ff006e';bl.forEach(t=>ctx.fillRect(t.x,t.y,t.w,t.h));if(rodando)requestAnimationFrame(l)}l()}
+const jogos=[{n:"Biel Clicker",id:"clicker",emoji:"👑"},{n:"Adivinha Biel",id:"adivinha",emoji:"🎯"},{n:"Biel Snake",id:"snake",emoji:"🐍"},{n:"Biel Flappy",id:"flappy",emoji:"🐦"},{n:"Biel Memory",id:"memoria",emoji:"🧠"},{n:"Biel Dado",id:"dado",emoji:"🎲"},{n:"Biel Math",id:"math",emoji:"➕"},{n:"Biel Reflexo",id:"reflexo",emoji:"⚡"},{n:"Biel 2048",id:"2048",emoji:"🔢"},{n:"Biel Pong",id:"pong",emoji:"🏓"},{n:"Biel Breakout",id:"breakout",emoji:"🧱"},{n:"Biel Quiz",id:"quiz",emoji:"❓"},{n:"Biel TicTac",id:"velha",emoji:"⭕"},{n:"Biel Simon",id:"simon",emoji:"🎨"},{n:"Biel Dino",id:"dino",emoji:"🦖"},{n:"Biel Space",id:"space",emoji:"🚀"},{n:"Biel Catch",id:"catch",emoji:"🍎"},{n:"Biel Puzzle",id:"puzzle",emoji:"🧩"},{n:"Biel Color",id:"color",emoji:"🌈"},{n:"Biel Tap",id:"tap",emoji:"👆"}];
+jogos.forEach((j,i)=>{document.getElementById('gridMenu').innerHTML+=`<div class="card" onclick="abrir('${j.id}')"><h2>${j.emoji} ${j.n}</h2><p>Jogo ${i+1}</p></div>`});
+jogos.forEach(j=>{document.getElementById('containerJogos').innerHTML+=`<div id="${j.id}" class="tela"><button class="voltar" onclick="voltar()">← Menu</button><div class="jogo" id="jogo_${j.id}"></div></div>`});
+let jogoAtivo=null,loopAtivo=null;
+function abrir(id){if(loopAtivo)cancelAnimationFrame(loopAtivo);document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));document.getElementById(id).classList.add('ativa');jogoAtivo=id;iniciarJogo(id)}
+function voltar(){if(loopAtivo)cancelAnimationFrame(loopAtivo);document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));document.getElementById('menu').classList.add('ativa');jogoAtivo=null}
+function iniciarJogo(id){const div=document.getElementById('jogo_'+id);if(div.dataset.ini)return;div.dataset.ini=1;if(id=='clicker')jogoClicker(div);if(id=='adivinha')jogoAdivinha(div);if(id=='snake')jogoSnake(div);if(id=='flappy')jogoFlappy(div);if(id=='memoria')jogoMemoria(div);if(id=='dado')jogoDado(div);if(id=='math')jogoMath(div);if(id=='reflexo')jogoReflexo(div);if(id=='2048')jogo2048(div);if(id=='pong')jogoPong(div);if(id=='breakout')jogoBreakout(div);if(id=='quiz')jogoQuiz(div);if(id=='velha')jogoVelha(div);if(id=='simon')jogoSimon(div);if(id=='dino')jogoDino(div);if(id=='space')jogoSpace(div);if(id=='catch')jogoCatch(div);if(id=='puzzle')jogoPuzzle(div);if(id=='color')jogoColor(div);if(id=='tap')jogoTap(div)}
+function jogoClicker(div){let c=+localStorage.getItem('bielCoins')||0,p=+localStorage.getItem('bielPC')||1,cu=+localStorage.getItem('bielCusto')||50;div.innerHTML=`<h1 id="coins">${c} BielCoins</h1><div class="moeda" onclick="clicarClicker()">👑</div><p class="info" id="pc">${p} por clique</p><button class="btn" onclick="upClicker()">Upgrade - <span id="cu">${cu}</span></button>`;window.clicarClicker=()=>{c+=p;atualizarClicker()};window.upClicker=()=>{if(c>=cu){c-=cu;p++;cu=Math.floor(cu*1.8);atualizarClicker()}};function atualizarClicker(){div.querySelector('#coins').innerText=c+' BielCoins';div.querySelector('#pc').innerText=p+' por clique';div.querySelector('#cu').innerText=cu;localStorage.setItem('bielCoins',c);localStorage.setItem('bielPC',p);localStorage.setItem('bielCusto',cu)}}
+function jogoAdivinha(div){let n=Math.floor(Math.random()*100)+1,t=0,r=+localStorage.getItem('bielRec')||0;div.innerHTML=`<h1>Adivinha Biel</h1><p class="info">1 a 100</p><input type="number" id="ch" placeholder="Chute" min="1" max="100"><br><button class="btn" onclick="tentarAdivinha()">Tentar</button><p id="dc" style="font-size:22px;margin:15px;color:#00ff88;min-height:30px"></p><p class="info">Tentativas: <span id="tt">0</span> | Recorde: <span id="rc">${r||'-'}</span></p>`;window.tentarAdivinha=()=>{let c=+div.querySelector('#ch').value;if(!c||c<1||c>100)return;t++;div.querySelector('#tt').innerText=t;if(c==n){div.querySelector('#dc').innerText='ACERTOU EM '+t+'!';if(!r||t<r){r=t;localStorage.setItem('bielRec',r);div.querySelector('#rc').innerText=r}setTimeout(()=>{n=Math.floor(Math.random()*100)+1;t=0;div.querySelector('#tt').innerText=0;div.querySelector('#dc').innerText='Novo número!';div.querySelector('#ch').value=''},2000)}else if(c<n){div.querySelector('#dc').innerText='MAIOR 📈'}else{div.querySelector('#dc').innerText='MENOR 📉'}div.querySelector('#ch').value=''}}
+function jogoSnake(div){div.innerHTML=`<h1>Biel Snake</h1><div class="info">Pontos: <span id="pts">0</span> | Recorde: <span id="rs">${+localStorage.getItem('snakeRec')||0}</span></div><canvas id="cv" width="280" height="280"></canvas><div class="controles"><div class="vazio"></div><div class="btn-seta" onclick="snakeCima()">⬆️</div><div class="vazio"></div><div class="btn-seta" onclick="snakeEsq()">⬅️</div><div class="btn-seta" onclick="snakePausa()">⏸️</div><div class="btn-seta" onclick="snakeDir()">➡️</div><div class="vazio"></div><div class="btn-seta" onclick="snakeBaixo()">⬇️</div><div class="vazio"></div></div>`;const cv=div.querySelector('#cv'),ctx=cv.getContext('2d'),g=14,s=cv.width/g;let co=[{x:7,y:7}],dr={x:1,y:0},fo=nf(),pt=0,rs=+localStorage.getItem('snakeRec')||0,pa=false,ve=120;function nf(){let f;do{f={x:Math.floor(Math.random()*g),y:Math.floor(Math.random()*g)}}while(co.some(c=>c.x==f.x&&c.y==f.y));return f}window.snakeCima=()=>{if(pa)return;if(dr.y==1)return;dr={x:0,y:-1}};window.snakeBaixo=()=>{if(pa)return;if(dr.y==-1)return;dr={x:0,y:1}};window.snakeEsq=()=>{if(pa)return;if(dr.x==1)return;dr={x:-1,y:0}};window.snakeDir=()=>{if(pa)return;if(dr.x==-1)return;dr={x:1,y:0}};window.snakePausa=()=>{pa=!pa};function loop(){if(jogoAtivo!='snake'){cancelAnimationFrame(loopAtivo);return}if(pa){loopAtivo=requestAnimationFrame(loop);return}let h={x:co[0].x+dr.x,y:co[0].y+dr.y};if(h.x<0||h.x>=g||h.y<0||h.y>=g||co.some(c=>c.x==h.x&&c.y==h.y)){if(pt>rs){rs=pt;localStorage.setItem('snakeRec',rs);div.querySelector('#rs').innerText=rs}co=[{x:7,y:7}];dr={x:1,y:0};pt=0;fo=nf();ve=120}else{co.unshift(h);if(h.x==fo.x&&h.y==fo.y){pt+=10;fo=nf();if(ve>60)ve-=2}else{co.pop()}}ctx.fillStyle='#0f18';ctx.fillRect(0,0,cv.width,cv.height);ctx.fillStyle='#ff3333';ctx.fillRect(fo.x*s+3,fo.y*s+3,s-6,s-6);co.forEach((c,i)=>{ctx.fillStyle=i==0?'#00ff00':'#00cc00';ctx.fillRect(c.x*s+1,c.y*s+1,s-2,s-2)});div.querySelector('#pts').innerText=pt;setTimeout(()=>{loopAtivo=requestAnimationFrame(loop)},ve)}loop()}
+function jogoFlappy(div){div.innerHTML=`<h1>Biel Flappy</h1><p class="info">Pontos: <span id="pf">0</span> | Recorde: <span id="rf">${+localStorage.getItem('flappyRec')||0}</span></p><canvas id="cvf" width="280" height="400"></canvas><p class="info">Toque pra pular</p>`;const cv=div.querySelector('#cvf'),ctx=cv.getContext('2d');let b={x:50,y:200,v:0},p=[],pt=0,rf=+localStorage.getItem('flappyRec')||0;cv.onclick=()=>{b.v=-7};function l(){if(jogoAtivo!='flappy'){cancelAnimationFrame(loopAtivo);return}ctx.fillStyle='#87CEEB';ctx.fillRect(0,0,280,400);b.v+=0.5;b.y+=b.v;if(b.y>380||b.y<0){if(pt>rf){rf=pt;localStorage.setItem('flappyRec',rf);div.querySelector('#rf').innerText=rf}b={x:50,y:200,v:0};p=[];pt=0}if(p.length==0||p[p.length-1].x<150){p.push({x:280,h:Math.random()*200+50})}p.forEach((o,i)=>{o.x-=3;ctx.fillStyle='#00aa00';ctx.fillRect(o.x,0,50,o.h);ctx.fillRect(o.x,o.h+120,50,400);if(b.x>o.x&&b.x<o.x+50&&(b.y<o.h||b.y>o.h+120)){if(pt>rf){rf=pt;localStorage.setItem('flappyRec',rf);div.querySelector('#rf').innerText=rf}b={x:50,y:200,v:0};p=[];pt=0}if(o.x==50)pt++});ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(b.x,b.y,15,0,7);ctx.fill();div.querySelector('#pf').innerText=pt;loopAtivo=requestAnimationFrame(l)}l()}
+function jogoMemoria(div){let s=[],j=[],p=0,r=+localStorage.getItem('memRec')||0;div.innerHTML=`<h1>Biel Memory</h1><p class="info">Pontos: <span id="pm">${p}</span> | Recorde: <span id="rm">${r}</span></p><div id="mem"></div><button class="btn" onclick="novaSeq()">Nova Sequência</button>`;window.novaSeq=()=>{s.push(Math.floor(Math.random()*4));j=[];mostrarSeq()};function mostrarSeq(){let i=0;const int=setInterval(()=>{if(i>=s.length){clearInterval(int);return}const c=['vermelho','azul','verde','amarelo'][s[i]];const el=div.querySelector('.'+c);el.style.opacity='0.3';setTimeout(()=>el.style.opacity='1',300);i++},600)}div.querySelector('#mem').innerHTML='<div class="cor vermelho" onclick="clickCorMem(0)"></div><div class="cor azul" onclick="clickCorMem(1)"></div><div class="cor verde" onclick="clickCorMem(2)"></div><div class="cor amarelo" onclick="clickCorMem(3)"></div>';window.clickCorMem=(c)=>{j.push(c);if(j[j.length-1]!=s[j.length-1]){if(p>r){r=p;localStorage.setItem('memRec',r);div.querySelector('#rm').innerText=r}p=0;s=[];div.querySelector('#pm').innerText=0;alert('Errou!')}else if(j.length==s.length){p++;div.querySelector('#pm').innerText=p;setTimeout(()=>{j=[];s.push(Math.floor(Math.random()*4));mostrarSeq()},1000)}}}
+function jogoDado(div){let r=+localStorage.getItem('dadoRec')||0;div.innerHTML=`<h1>Biel Dado</h1><div class="dado" id="dd">🎲</div><p class="info">Último: <span id="ud">-</span> | Maior: <span id="rd">${r}</span></p><button class="btn" onclick="rolarDado()">Rolar Dado</button>`;window.rolarDado=()=>{const n=Math.floor(Math.random()*6)+1;div.querySelector('#dd').innerText=['⚀','⚁','⚂','⚃','⚄','⚅'][n-1];div.querySelector('#ud').innerText=n;if(n>r){r=n;localStorage.setItem('dadoRec',r);div.querySelector('#rd').innerText=r}}}
+function jogoMath(div){let p=0,r=+localStorage.getItem('mathRec')||0,a=0,b=0,op='+',res=0;div.innerHTML=`<h1>Biel Math</h1><p class="info">Pontos: <span id="pmt">${p}</span> | Recorde: <span id="rmt">${r}</span></p><h2 id="perg"></h2><input type="number" id="resp" placeholder="Resposta"><br><button class="btn" onclick="verificarMath()">Verificar</button>`;window.verificarMath=()=>{const r=+div.querySelector('#resp').value;if(r==res){p++;if(p>r){r=p;localStorage.setItem('mathRec',r);div.querySelector('#rmt').innerText=r}div.querySelector('#pmt').innerText=p;novaPergMath()}else{p=0;div.querySelector('#pmt').innerText=0;alert('Errou!')}div.querySelector('#resp').value=''};function novaPergMath(){a=Math.floor(Math.random()*20)+1;b=Math.floor(Math.random()*20)+1;op=['+','-','x'][Math.floor(Math.random()*3)];res=op=='+'?a+b:op=='-'?a-b:a*b;div.querySelector('#perg').innerText=`${a} ${op} ${b} =?`}novaPergMath()}
+function jogoReflexo(div){let t=0,ini=0,r=+localStorage.getItem('reflexRec')||9999;div.innerHTML=`<h1>Biel Reflexo</h1><p class="info">Melhor: <span id="rr">${r==9999?'-':r+'ms'}</span></p><div id="area" style="width:250px;height:250px;background:#333;margin:20px auto;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer">Clique pra começar</div><p id="tr" class="info"></p>`;div.querySelector('#area').onclick=()=>{if(t==0){div.querySelector('#area').style.background='#333';div.querySelector('#area').innerText='Espere...';t=1;setTimeout(()=>{div.querySelector('#area').style.background='#00ff88';div.querySelector('#area').innerText='CLIQUE!';ini=Date.now();t=2},Math.random()*3000+1000)}else if(t==2){const ms=Date.now()-ini;div.querySelector('#tr').innerText=ms+'ms';if(ms<r){r=ms;localStorage.setItem('reflexRec',r);div.querySelector('#rr').innerText=r+'ms'}t=0;div.querySelector('#area').innerText='Clique pra começar'}else{t=0;div.querySelector('#area').innerText='Muito cedo!';div.querySelector('#area').style.background='#ff006e'}}}
+function jogo2048(div){let g=[[0,0,0,0],[0,0,0],[0,0,0,0],[0,0,0,0]],p=0,r=+localStorage.getItem('2048Rec')||0;div.innerHTML=`<h1>Biel 2048</h1><p class="info">Pontos: <span id="p2">0</span> | Recorde: <span id="r2">${r}</span></p><canvas id="cv2" width="280" height="280"></canvas><div class="controles"><div class="vazio"></div><div class="btn-seta" onclick="m2048(0,-1)">⬆️</div><div class="vazio"></div><div class="btn-seta" onclick="m2048(-1,0)">⬅️</div><div class="vazio"></div><div class="btn-seta" onclick="m2048(1,0)">➡️</div><div class="vazio"></div><div class="btn-seta" onclick="m2048(0,1)">⬇️</div><div class="vazio"></div></div>`;const cv=div.querySelector('#cv2'),ctx=cv.getContext('2d');function add(){let e=[];for(let i=0;i<4;i++)for(let j=0;j<4;j++)if(g[i][j]==0)e.push([i,j]);if(e.length){let [i,j]=e[Math.floor(Math.random()*e.length)];g[i][j]=Math.random()<0.9?2:4}}function draw(){ctx.fillStyle='#111';ctx.fillRect(0,0,280);for(let i=0;i<4;i++)for(let j=0;j<4;j++){if(g[i][j]){ctx.fillStyle='#00d9ff';ctx.fillRect(j*70+5,i*70+5,60);ctx.fillStyle='#000';ctx.font='bold 24px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(g[i][j],j*70+35,i*70+35)}}}window.m2048=(dx,dy)=>{let mv=false,ng=g.map(r=>[...r]);if(dx){for(let i=0;i<4;i++){let r=ng[i].filter(x=>x);for(let j=0;j<r.length-1;j++)if(r[j]==r[j+1]){r[j]*=2;p+=r[j];r.splice(j+1,1)}while(r.length<4)r.push(0);if(dx<0)ng[i]=r;else ng[i]=r.reverse()}mv=true}if(dy){for(let j=0;j<4;j++){let c=ng.map(r=>r[j]).filter(x=>x);for(let i=0;i<c.length-1;i++)if(c[i]==c[i+1]){c[i]*=2;p+=c[i];c.splice(i+1,1)}while(c.length<4)c.push(0);if(dy<0)for(let i=0;i<4;i++)ng[i][j]=c[i];else for(let i=0;i<4;i++)ng[i][j]=c[3-i]}mv=true}if(mv){g=ng;add();draw();div.querySelector('#p2').innerText=p;if(p>r){r=p;localStorage.setItem('2048Rec',r);div.querySelector('#r2').innerText=r}}}add();draw()}
+function jogoPong(div){div.innerHTML=`<h1>Biel Pong</h1><p class="info">Pontos: <span id="pp">0</span> | Recorde: <span id="rp">${+localStorage.getItem('pongRec')||0}</span></p><canvas id="cvp" width="280" height="400"></canvas><p class="info">Arraste pra mover</p>`;const cv=div.querySelector('#cvp'),ctx=cv.getContext('2d');let b={x:140,y:200,vx:3,vy:3},p={x:110,y:370,w:60},pt=0,rp=+localStorage.getItem('pongRec')||0;cv.ontouchmove=cv.onmousemove=(e)=>{const r=cv.getBoundingClientRect();const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;p.x=Math.max(0,Math.min(220,x-p.w/2))};function l(){if(jogoAtivo!='pong'){cancelAnimationFrame(loopAtivo);return}ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,280,400);b.x+=b.vx;b.y+=b.vy;if(b.x<10||b.x>270)b.vx*=-1;if(b.y<10)b.vy*=-1;if(b.y>360&&b.x>p.x&&b.x<p.x+p.w){b.vy*=-1;pt++;div.querySelector('#pp').innerText=pt;if(pt>rp){rp=pt;localStorage.setItem('pongRec',rp);div.querySelector('#rp').innerText=rp}}if(b.y>400){b={x:140,y:200,vx:3,vy:3};pt=0;div.querySelector('#pp').innerText=0}ctx.fillStyle='#00d9ff';ctx.beginPath();ctx.arc(b.x,b.y,10,0,7);ctx.fill();ctx.fillRect(p.x,p.y,p.w,10);loopAtivo=requestAnimationFrame(l)}l()}
+function jogoBreakout(div){div.innerHTML=`<h1>Biel Breakout</h1><p class="info">Quebre todos os blocos!</p><canvas id="cvb" width="280" height="400"></canvas>`;const cv=div.querySelector('#cvb'),ctx=cv.getContext('2d');let b={x:140,y:300,vx:3,vy:-3},p={x:110,y:380,w:60},bl=[];for(let i=0;i<5;i++)for(let j=0;j<7;j++)bl.push({x:j*40+5,y:i*20+30,w:35,h:15});cv.ontouchmove=cv.onmousemove=(e)=>{const r=cv.getBoundingClientRect();p.x=Math.max(0,Math.min(220,(e.touches?e.touches[0].clientX:e.clientX)-r.left-p.w/2))};function l(){if(jogoAtivo!='breakout'){cancelAnimationFrame(loopAtivo);return}ctx.fillStyle='#0a0f';ctx.fillRect(0,0,280,400);b.x+=b.vx;b.y+=b.vy;if(b.x<5||b.x>275)b.vx*=-1;if(b.y<5)b.vy*=-1;if(b.y>370&&b.x>p.x&&b.x<p.x+p.w)b.vy*=-1;if(b.y>400){b={x:140,y:300,vx:3,vy:-3}}bl=bl.filter(t=>{if(b.x>t.x&&b.x<t.x+t.w&&b.y>t.y&&b.y<t.y+t.h){b.vy*=-1;return false}return true});ctx.fillStyle='#00d9ff';ctx.beginPath();ctx.arc(b.x,b.y,8,0,7);ctx.fill();ctx.fillRect(p.x,p.y,p.w,8);ctx.fillStyle='#ff006e';bl.forEach(t=>ctx.fillRect(t.x,t.y,t.w,t.h));loopAtivo=requestAnimationFrame(l)}l()}
 function jogoQuiz(div){const q=[{p:'Capital do Brasil?',r:'brasilia'},{p:'2+2x2?',r:'6'},{p:'Cor do céu?',r:'azul'},{p:'5x5?',r:'25'},{p:'10-3?',r:'7'}];let i=0,pt=0;div.innerHTML=`<h1>Biel Quiz</h1><p class="info">Pontos: <span id="pq">0</span></p><h2 id="perg"></h2><input id="res" placeholder="Resposta"><br><button class="btn" onclick="vrQuiz()">Responder</button>`;function np(){if(i>=q.length){alert('Fim! '+pt+' pontos');i=0;pt=0}div.querySelector('#perg').innerText=q[i].p;div.querySelector('#res').value=''}window.vrQuiz=()=>{if(div.querySelector('#res').value.toLowerCase()==q[i].r){pt++;div.querySelector('#pq').innerText=pt}i++;np()};np()}
-function jogoVelha(div){let t=['','','','','','','','',''],v=true;div.innerHTML=`<h1>Biel TicTac</h1><div id="tab" style="display:grid;grid-template-columns:repeat(3,80px);gap:8px;max-width:260px;margin:15px auto"></div><p id="st" class="info">Sua vez</p>`;const tab=div.querySelector('#tab');for(let i=0;i<9;i++){const c=document.createElement('div');c.style.cssText='width:80px;height:80px;background:#151520;border:3px solid #333;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer';c.onclick=()=>{if(t[i]||!v)return;t[i]='X';c.innerText='X';c.style.color='#00d9ff';if(ch()){div.querySelector('#st').innerText='Você ganhou!';v=false;setTimeout(rs,2000);return}if(!t.includes('')){div.querySelector('#st').innerText='Empate!';v=false;setTimeout(rs,2000);return}ia()};tab.appendChild(c)}function ch(){const l=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return l.some(c=>t[c[0]]&&t[c[0]]==t[c[1]]&&t[c[0]]==t[c[2]])}function ia(){let j=t.indexOf('');if(j>-1){t[j]='O';tab.children[j].innerText='O';tab.children[j].style.color='#ff006e';if(ch()){div.querySelector('#st').innerText='PC ganhou!';v=false;setTimeout(rs,2000)}}};function rs(){t=['','','','','','','','',''];v=true;[...tab.children].forEach(c=>c.innerText='');div.querySelector('#st').innerText='Sua vez'}}
+function jogoVelha(div){let t=['','',''],v=true;div.innerHTML=`<h1>Biel TicTac</h1><div id="tab" style="display:grid;grid-template-columns:repeat(3,80px);gap:8px;max-width:260px;margin:15px auto"></div><p id="st" class="info">Sua vez</p>`;const tab=div.querySelector('#tab');for(let i=0;i<9;i++){const c=document.createElement('div');c.style.cssText='width:80px;height:80px;background:#151520;border:3px solid #333;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer';c.onclick=()=>{if(t[i]||!v)return;t[i]='X';c.innerText='X';c.style.color='#00d9ff';if(ch()){div.querySelector('#st').innerText='Você ganhou!';v=false;setTimeout(rs,2000);return}if(!t.includes('')){div.querySelector('#st').innerText='Empate!';v=false;setTimeout(rs,2000);return}ia()};tab.appendChild(c)}function ch(){const l=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return l.some(c=>t[c[0]]&&t[c[0]]==t[c[1]]&&t[c[0]]==t[c[2]])}function ia(){let j=t.indexOf('');if(j>-1){t[j]='O';tab.children[j].innerText='O';tab.children[j].style.color='#ff006e';if(ch()){div.querySelector('#st').innerText='PC ganhou!';v=false;setTimeout(rs,2000)}}};function rs(){t=['','',''];v=true;[...tab.children].forEach(c=>c.innerText='');div.querySelector('#st').innerText='Sua vez'}}
 function jogoSimon(div){jogoMemoria(div)}
-function jogoDino(div){div.innerHTML=`<h1>Biel Dino</h1><p class="info">Pontos: <span id="pd">0</span> | Recorde: <span id="rd">${+localStorage.getItem('dinoRec')||0}</span></p><canvas id="cvd" width="280" height="200"></canvas><p class="info">Toque pra pular</p>`;const cv=div.querySelector('#cvd'),ctx=cv.getContext('2d');let d={x:40,y:150,v:0,g:false},o=[],p=0,rd=+localStorage.getItem('dinoRec')||0,rodando=true;cv.onclick=()=>{if(d.g){d.v=-12;d.g=false}};function l(){if(jogoAtivo!='dino'){rodando=false;return}ctx.fillStyle='#87CEEB';ctx.fillRect(0,0,280,200);ctx.fillStyle='#8B4513';ctx.fillRect(0,180,280,20);d.v+=0.6;d.y+=d.v;if(d.y>150){d.y=150;d.v=0;d.g=true}if(Math.random()<0.02)o.push({x:280,w:20,h:30+Math.random()*20});o=o.filter(ob=>{ob.x-=5;ctx.fillStyle='#228B22';ctx.fillRect(ob.x,180-ob.h,ob.w,ob.h);if(d.x+20>ob.x&&d.x<ob.x+ob.w&&d.y+20>180-ob.h){if(p>rd){rd=p;localStorage.setItem('dinoRec',rd);div.querySelector('#rd').innerText=rd}d={x:40,y:150,v:0,g:false};o=[];p=0;return false}return ob.x>-20});p++;div.querySelector('#pd').innerText=Math.floor(p/10);ctx.fillStyle='#ff6600';ctx.fillRect(d.x,d.y,20,20);if(rodando)requestAnimationFrame(l)}l()}
-function jogoSpace(div){div.innerHTML=`<h1>Biel Space</h1><p class="info">Pontos: <span id="psp">0</span> | Recorde: <span id="rsp">${+localStorage.getItem('spaceRec')||0}</span></p><canvas id="cvs" width="280" height="400"></canvas><div class="controles"><div class="vazio"></div><div class="vazio"></div><div class="vazio"></div><div class="btn-seta" onclick="mvSpace(-1)">⬅️</div><div class="btn-seta" onclick="atSpace()">🔫</div><div class="btn-seta" onclick="mvSpace(1)">➡️</div></div>`;const cv=div.querySelector('#cvs'),ctx=cv.getContext('2d');let n={x:130,y:350},t=[],i=[],p=0,rsp=+localStorage.getItem('spaceRec')||0,rodando=true;window.mvSpace=(dfunction jogoSpace(div){div.innerHTML=`<h1>Biel Space</h1><p class="info">Pontos: <span id="psp">0</span> | Recorde: <span id="rsp">${+localStorage.getItem('spaceRec')||0}</span></p><canvas id="cvs" width="280" height="400"></canvas><div class="controles"><div class="vazio"></div><div class="vazio"></div><div class="vazio"></div><div class="btn-seta" onclick="mvSpace(-1)">⬅️</div><div class="btn-seta" onclick="atSpace()">🔫</div><div class="btn-seta" onclick="mvSpace(1)">➡️</div></div>`;const cv=div.querySelector('#cvs'),ctx=cv.getContext('2d');let n={x:130,y:350},ti=[],in=[],p=0,rsp=+localStorage.getItem('spaceRec')||0,rodando=true;window.mvSpace=(d)=>{n.x=Math.max(0,Math.min(260,n.x+d*20))};window.atSpace=()=>{ti.push({x:n.x+10,y:n.y})};function l(){if(jogoAtivo!='space'){rodando=false;return}ctx.fillStyle='#000';ctx.fillRect(0,0,280,400);if(Math.random()<0.03)in.push({x:Math.random()*260,y:0});ctx.fillStyle='#00d9ff';ctx.fillRect(n.x,n.y,20,20);ctx.fillStyle='#ffff00';ti=ti.filter(b=>{b.y-=8;ctx.fillRect(b.x,b.y,4,10);return b.y>0});ctx.fillStyle='#ff006e';in=in.filter(e=>{e.y+=2;ctx.fillRect(e.x,e.y,20,20);for(let i=ti.length-1;i>=0;i--){if(ti[i].x>e.x&&ti[i].x<e.x+20&&ti[i].y<e.y+20){ti.splice(i,1);p+=10;div.querySelector('#psp').innerText=p;if(p>rsp){rsp=p;localStorage.setItem('spaceRec',rsp);div.querySelector('#rsp').innerText=rsp}return false}}if(e.y>400){alert('Game Over! '+p+' pontos');n={x:130,y:350};ti=[];in=[];p=0;div.querySelector('#psp').innerText=0;return false}return true});if(rodando)requestAnimationFrame(l)}l()}
+function jogoDino(div){div.innerHTML=`<h1>Biel Dino</h1><p class="info">Pontos: <span id="pd">0</span> | Recorde: <span id="rd">${+localStorage.getItem('dinoRec')||0}</span></p><canvas id="cvd" width="280" height="200"></canvas><p class="info">Toque pra pular</p>`;const cv=div.querySelector('#cvd'),ctx=cv.getContext('2d');let d={x:40,y:150,v:0,g:false},o=[],p=0,rd=+localStorage.getItem('dinoRec')||0;cv.onclick=()=>{if(d.g){d.v=-12;d.g=false}};function l(){if(jogoAtivo!='dino'){cancelAnimationFrame(loopAtivo);return}ctx.fillStyle='#87CEEB';ctx.fillRect(0,0,280,200);ctx.fillStyle='#8B4513';ctx.fillRect(0,180,280,20);d.v+=0.6;d.y+=d.v;if(d.y>150){d.y=150;d.v=0;d.g=true}if(Math.random()<0.02)o.push({x:280,w:20,h:30+Math.random()*20});o=o.filter(ob=>{ob.x-=5;ctx.fillStyle='#228B22';ctx.fillRect(ob.x,180-ob.h,ob.w,ob.h);if(d.x+20>ob.x&&d.x<ob.x+ob.w&&d.y+20>180-ob.h){if(p>rd){rd=p;localStorage.setItem('dinoRec',rd);div.querySelector('#rd').innerText=rd}d={x:40,y:150,v:0,g:false};o=[];p=0;return false}return ob.x>-20});p++;div.querySelector('#pd').innerText=Math.floor(p/10);ctx.fillStyle='#ff6600';ctx.fillRect(d.x,d.y,20,20);loopAtivo=requestAnimationFrame(l)}l()}
+function jogoSpace(div){div.innerHTML=`<h1>Biel Space</h1><p class="info">Pontos: <span id="psp">0</span> | Recorde: <span id="rsp">${+localStorage.getItem('spaceRec')||0}</span></p><canvas id="cvs" width="280" height="400"></canvas><div class="controles"><div class="vazio"></div><div class="vazio"></div><div class="vazio"></div><div class="btn-seta" onclick="mvSpace(-1)">⬅️</div><div class="btn-seta" onclick="atSpace()">🔫</div><div class="btn-seta" onclick="mvSpace(1)">➡️</div></div>`;const cv=div.querySelector('#cvs'),ctx=cv.getContext('2d');let n={x:130,y:350},ti=[],in=[],p=0,rsp=+localStorage.getItem('spaceRec')||0;window.mvSpace=(d)=>{n.x=Math.max(0,Math.min(260,n.x+d*20))};window.atSpace=()=>{ti.push({x:n.x+10,y:n.y})};function l(){if(jogoAtivo!='space'){cancelAnimationFrame(loopAtivo);return}ctx.fillStyle='#000';ctx.fillRect(0,0,280,400);if(Math.random()<0.03)in.push({x:Math.random()*260,y:0});ctx.fillStyle='#00d9ff';ctx.fillRect(n.x,n.y,20);ctx.fillStyle='#ffff00';ti=ti.filter(b=>{b.y-=8;ctx.fillRect(b.x,b.y,4,10);return b.y>0});ctx.fillStyle='#ff006e';in=in.filter(e=>{e.y+=2;ctx.fillRect(e.x,e.y,20,20);for(let i=ti.length-1;i>=0;i--){if(ti[i].x>e.x&&ti[i].x<e.x+20&&ti[i].y<e.y+20){ti.splice(i,1);p+=10;div.querySelector('#psp').innerText=p;if(p>rsp){rsp=p;localStorage.setItem('spaceRec',rsp);div.querySelector('#rsp').innerText=rsp}return false}}if(e.y>400){alert('Game Over! '+p+' pontos');n={x:130,y:350};ti=[];in=[];p=0;div.querySelector('#psp').innerText=0;return false}return true});loopAtivo=requestAnimationFrame(l)}l()}
 
-// 17. CATCH
 function jogoCatch(div){
 div.innerHTML=`<h1>Biel Catch</h1><p class="info">Pontos: <span id="pc">0</span> | Recorde: <span id="rc">${+localStorage.getItem('catchRec')||0}</span></p><canvas id="cvc" width="280" height="400"></canvas><p class="info">Arraste pra pegar</p>`;
-const cv=div.querySelector('#cvc'),ctx=cv.getContext('2d');let c={x:110,y:370,w:60},f=[],p=0,rc=+localStorage.getItem('catchRec')||0,rodando=true;
+const cv=div.querySelector('#cvc'),ctx=cv.getContext('2d');let c={x:110,y:370,w:60},f=[],p=0,rc=+localStorage.getItem('catchRec')||0;
 cv.ontouchmove=cv.onmousemove=(e)=>{const r=cv.getBoundingClientRect();const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;c.x=Math.max(0,Math.min(220,x-c.w/2))};
-function l(){if(jogoAtivo!='catch'){rodando=false;return}ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,280,400);if(Math.random()<0.05)f.push({x:Math.random()*260,y:0});ctx.fillStyle='#00d9ff';ctx.fillRect(c.x,c.y,c.w,10);ctx.fillStyle='#ff006e';f=f.filter(fr=>{fr.y+=3;ctx.beginPath();ctx.arc(fr.x,fr.y,10,0,7);ctx.fill();if(fr.y>360&&fr.x>c.x&&fr.x<c.x+c.w){p++;div.querySelector('#pc').innerText=p;if(p>rc){rc=p;localStorage.setItem('catchRec',rc);div.querySelector('#rc').innerText=rc}return false}return fr.y<400});if(rodando)requestAnimationFrame(l)}
+function l(){if(jogoAtivo!='catch'){cancelAnimationFrame(loopAtivo);return}ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,280,400);if(Math.random()<0.05)f.push({x:Math.random()*260,y:0});ctx.fillStyle='#00d9ff';ctx.fillRect(c.x,c.y,c.w,10);ctx.fillStyle='#ff006e';f=f.filter(fr=>{fr.y+=3;ctx.beginPath();ctx.arc(fr.x,fr.y,10,0,7);ctx.fill();if(fr.y>360&&fr.x>c.x&&fr.x<c.x+c.w){p++;div.querySelector('#pc').innerText=p;if(p>rc){rc=p;localStorage.setItem('catchRec',rc);div.querySelector('#rc').innerText=rc}return false}return fr.y<400});loopAtivo=requestAnimationFrame(l)}
 l()
 }
 
-// 18. PUZZLE
 function jogoPuzzle(div){
 div.innerHTML=`<h1>Biel Puzzle</h1><p class="info">Movimentos: <span id="pm">0</span> | Recorde: <span id="rm">${+localStorage.getItem('puzzleRec')||'-'}</span></p><canvas id="cvp" width="280" height="280"></canvas>`;
 const cv=div.querySelector('#cvp'),ctx=cv.getContext('2d');let t=[1,2,3,4,5,6,7,8,0],m=0,rm=+localStorage.getItem('puzzleRec')||9999,vazio=8;
 function embaralhar(){for(let i=0;i<100;i++){let viz=[];let x=vazio%3,y=Math.floor(vazio/3);if(x>0)viz.push(vazio-1);if(x<2)viz.push(vazio+1);if(y>0)viz.push(vazio-3);if(y<2)viz.push(vazio+3);let r=viz[Math.floor(Math.random()*viz.length)];[t[vazio],t[r]]=[t[r],t[vazio]];vazio=r}}
-function draw(){ctx.fillStyle='#111';ctx.fillRect(0,0,280,280);for(let i=0;i<9;i++){if(t[i]){ctx.fillStyle='#00d9ff';ctx.fillRect((i%3)*93+5,Math.floor(i/3)*93+5,83,83);ctx.fillStyle='#000';ctx.font='bold 32px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t[i],(i%3)*93+46,Math.floor(i/3)*93+46)}}}
+function draw(){ctx.fillStyle='#111';ctx.fillRect(0,0,280,280);for(let i=0;i<9;i++){if(t[i]){ctx.fillStyle='#00d9ff';ctx.fillRect((i%3)*93+5,Math.floor(i/3)*93+5,83);ctx.fillStyle='#000';ctx.font='bold 32px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t[i],(i%3)*93+46,Math.floor(i/3)*93+46)}}}
 cv.onclick=(e)=>{const r=cv.getBoundingClientRect();const x=Math.floor((e.clientX-r.left)/93),y=Math.floor((e.clientY-r.top)/93);const i=y*3+x;const vx=vazio%3,vy=Math.floor(vazio/3),ix=i%3,iy=Math.floor(i/3);if((Math.abs(vx-ix)==1&&vy==iy)||(Math.abs(vy-iy)==1&&vx==ix)){[t[vazio],t[i]]=[t[i],t[vazio]];vazio=i;m++;div.querySelector('#pm').innerText=m;draw();if(t.join('')=='123456780'){if(m<rm){rm=m;localStorage.setItem('puzzleRec',rm);div.querySelector('#rm').innerText=rm}alert('Ganhou em '+m+' movimentos!')}}}
 embaralhar();draw()
 }
 
-// 19. COLOR
 function jogoColor(div){
 let p=0,r=+localStorage.getItem('colorRec')||0,cor='';
 div.innerHTML=`<h1>Biel Color</h1><p class="info">Pontos: <span id="pcl">${p}</span> | Recorde: <span id="rcl">${r}</span></p><h2 id="corAlvo" style="font-size:40px;margin:20px"></h2><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:20px auto"></div>`;
@@ -263,7 +99,6 @@ function novo(){cor=cores[Math.floor(Math.random()*cores.length)];div.querySelec
 novo()
 }
 
-// 20. TAP
 function jogoTap(div){
 let p=0,r=+localStorage.getItem('tapRec')||0,t=10,rodando=false;
 div.innerHTML=`<h1>Biel Tap</h1><p class="info">Pontos: <span id="ptp">${p}</span> | Recorde: <span id="rtp">${r}</span></p><h2 id="tempo" style="font-size:50px;margin:20px">10s</h2><button class="btn" id="btnTap" onclick="tapTap()" style="width:200px;height:200px;font-size:40px;border-radius:50%">TAP!</button><p class="info" id="status">Clique pra começar</p>`;
