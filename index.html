@@ -585,4 +585,555 @@ window.onload = () => {
 }
 </script>
 </body>
+</html>      border: none; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-weight: bold;
+      margin: 5px;
+      transition: 0.2s;
+    }
+    button:hover { transform: scale(1.05); background: #00cc6a; }
+   .btn-game { 
+      background: #1a1a1a; 
+      color: #00ff88; 
+      border: 2px solid #00ff88; 
+      width: 200px; 
+      height: 120px; 
+      margin: 10px;
+      font-size: 18px;
+    }
+   .btn-voltar { background: #ff4444; color: #fff; }
+    
+    /* Grid de jogos */
+   .games-grid { 
+      display: flex; 
+      flex-wrap: wrap; 
+      justify-content: center; 
+      margin: 30px 0; 
+    }
+    
+    /* Admin */
+   .admin-panel { 
+      background: #1a0033; 
+      border: 2px solid #aa00ff; 
+      padding: 15px; 
+      border-radius: 10px; 
+      margin: 20px 0; 
+    }
+   .admin-panel h3 { color: #aa00ff; margin-bottom: 10px; }
+   .admin-panel input { 
+      padding: 8px; 
+      background: #111; 
+      border: 1px solid #aa00ff; 
+      color: #fff; 
+      border-radius: 5px; 
+      margin: 5px;
+    }
+    
+    /* Áreas de jogo */
+   .game-area { 
+      background: #111; 
+      border: 2px solid #00ff88; 
+      border-radius: 15px; 
+      padding: 30px; 
+      margin: 20px 0; 
+    }
+    #cpsBtn, #reflexoBtn, #alvoBtn { 
+      width: 200px; 
+      height: 200px; 
+      font-size: 24px; 
+      border-radius: 50%; 
+    }
+    #gameCanvas { 
+      border: 2px solid #00ff88; 
+      background: #000; 
+      border-radius: 10px;
+      max-width: 100%;
+    }
+   .stats { font-size: 24px; margin: 15px 0; color: #00ff88; }
+    #userBar { 
+      position: fixed; 
+      top: 10px; 
+      right: 10px; 
+      background: #111; 
+      padding: 10px 15px; 
+      border-radius: 20px; 
+      border: 1px solid #00ff88;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Biel Fun 👑</h1>
+    
+    <div id="userBar" class="hidden">
+      Jogador: <span id="nomeUser"></span> | <button onclick="sair()" style="padding:5px 10px; font-size:12px;">Sair</button>
+    </div>
+
+    <!-- TELA LOGIN -->
+    <div id="login">
+      <h2>Digite seu nome pra jogar:</h2>
+      <input type="text" id="nomeInput" placeholder="Seu nome aqui">
+      <br><button onclick="entrar()">ENTRAR</button>
+      <p style="margin-top:20px; color:#888; font-size:14px;">Dica: BebelDev👑 libera o painel admin</p>
+    </div>
+
+    <!-- MENU DE JOGOS -->
+    <div id="menu" class="hidden">
+      <h2>Escolha um jogo:</h2>
+      <div class="games-grid">
+        <button class="btn-game" onclick="abrirJogo('cps')">CPS TEST<br><small>Cliques por segundo</small></button>
+        <button class="btn-game" onclick="abrirJogo('reflexo')">TESTE REFLEXO<br><small>Velocidade</small></button>
+        <button class="btn-game" onclick="abrirJogo('robux')">GERADOR ROBUX<br><small>Zoeira</small></button>
+        <button class="btn-game" onclick="abrirJogo('snake')">COBRINHA<br><small>Clássico</small></button>
+        <button class="btn-game" onclick="abrirJogo('flappy')">FLAPPY BIRD<br><small>Impossível</small></button>
+        <button class="btn-game" onclick="abrirJogo('alvo')">CLICK ALVO<br><small>Mira</small></button>
+        <button class="btn-game" onclick="abrirJogo('memory')">MEMORY GAME<br><small>Memória</small></button>
+      </div>
+    </div>
+
+    <!-- JOGO CPS -->
+    <div id="jogo-cps" class="hidden game-area">
+      <h2>CPS TEST</h2>
+      <div class="stats">Tempo: <span id="cpsTempo">10</span>s | Cliques: <span id="cpsCliques">0</span></div>
+      <div class="stats">CPS: <span id="cpsResult">0</span></div>
+      <button id="cpsBtn" onclick="clicarCPS()">CLICA!</button>
+      <br><button class="btn-voltar" onclick="voltarMenu()">Voltar</button>
+      
+      <div id="admin-cps" class="admin-panel hidden">
+        <h3>PAINEL ADMIN CPS 👑</h3>
+        Tempo: <input type="number" id="cpsTempoAdmin" value="10" style="width:60px;">s
+        <button onclick="setCPSAdmin()">Aplicar</button>
+      </div>
+    </div>
+
+    <!-- JOGO REFLEXO -->
+    <div id="jogo-reflexo" class="hidden game-area">
+      <h2>TESTE DE REFLEXO</h2>
+      <div class="stats" id="reflexoMsg">Clique em INICIAR e espere ficar verde</div>
+      <div class="stats">Seu tempo: <span id="reflexoTempo">0</span>ms</div>
+      <button id="reflexoBtn" onclick="reflexoClick()">INICIAR</button>
+      <br><button class="btn-voltar" onclick="voltarMenu()">Voltar</button>
+      
+      <div id="admin-reflexo" class="admin-panel hidden">
+        <h3>PAINEL ADMIN REFLEXO 👑</h3>
+        Delay min: <input type="number" id="reflexoMin" value="1000" style="width:80px;">ms
+        Max: <input type="number" id="reflexoMax" value="5000" style="width:80px;">ms
+        <button onclick="setReflexoAdmin()">Aplicar</button>
+      </div>
+    </div>
+
+    <!-- GERADOR ROBUX -->
+    <div id="jogo-robux" class="hidden game-area">
+      <h2>GERADOR DE ROBUX</h2>
+      <div class="stats">Robux: <span id="robuxQtd">0</span> R$</div>
+      <button onclick="gerarRobux()">GERAR ROBUX GRÁTIS</button>
+      <p id="robuxMsg" style="margin:15px; color:#888;"></p>
+      <button class="btn-voltar" onclick="voltarMenu()">Voltar</button>
+      
+      <div id="admin-robux" class="admin-panel hidden">
+        <h3>PAINEL ADMIN ROBUX 👑</h3>
+        Add Robux: <input type="number" id="robuxAdd" value="1000" style="width:100px;">
+        <button onclick="addRobuxAdmin()">Adicionar</button>
+      </div>
+    </div>
+
+    <!-- JOGO COBRINHA -->
+    <div id="jogo-snake" class="hidden game-area">
+      <h2>COBRINHA</h2>
+      <div class="stats">Pontos: <span id="snakeScore">0</span></div>
+      <canvas id="gameCanvas" width="400" height="400"></canvas>
+      <br><p style="color:#888;">Use as setas do teclado</p>
+      <button onclick="iniciarSnake()">REINICIAR</button>
+      <button class="btn-voltar" onclick="voltarMenu()">Voltar</button>
+      
+      <div id="admin-snake" class="admin-panel hidden">
+        <h3>PAINEL ADMIN SNAKE 👑</h3>
+        Velocidade: <input type="number" id="snakeVel" value="100" style="width:80px;">
+        <button onclick="setSnakeAdmin()">Aplicar</button>
+      </div>
+    </div>
+
+    <!-- FLAPPY BIRD -->
+    <div id="jogo-flappy" class="hidden game-area">
+      <h2>FLAPPY BIRD</h2>
+      <div class="stats">Pontos: <span id="flappyScore">0</span></div>
+      <canvas id="flappyCanvas" width="400" height="500"></canvas>
+      <br><p style="color:#888;">Clique ou Espaço pra pular</p>
+      <button onclick="iniciarFlappy()">REINICIAR</button>
+      <button class="btn-voltar" onclick="voltarMenu()">Voltar</button>
+      
+      <div id="admin-flappy" class="admin-panel hidden">
+        <h3>PAINEL ADMIN FLAPPY 👑</h3>
+        Gravidade: <input type="number" id="flappyGrav" value="0.5" step="0.1" style="width:60px;">
+        <button onclick="setFlappyAdmin()">Aplicar</button>
+      </div>
+    </div>
+
+    <!-- CLICK ALVO -->
+    <div id="jogo-alvo" class="hidden game-area">
+      <h2>CLICK NO ALVO</h2>
+      <div class="stats">Tempo: <span id="alvoTempo">30</span>s | Pontos: <span id="alvoScore">0</span></div>
+      <div style="position:relative; height:300px; background:#000; border-radius:10px; margin:20px 0;">
+        <button id="alvoBtn" onclick="acertarAlvo()" style="position:absolute; width:50px; height:50px; border-radius:50%; display:none;">🎯</button>
+      </div>
+      <button onclick="iniciarAlvo()">INICIAR</button>
+      <button class="btn-voltar" onclick="voltarMenu()">Voltar</button>
+      
+      <div id="admin-alvo" class="admin-panel hidden">
+        <h3>PAINEL ADMIN ALVO 👑</h3>
+        Tempo: <input type="number" id="alvoTempoAdmin" value="30" style="width:60px;">s
+        <button onclick="setAlvoAdmin()">Aplicar</button>
+      </div>
+    </div>
+
+    <!-- MEMORY GAME -->
+    <div id="jogo-memory" class="hidden game-area">
+      <h2>MEMORY GAME</h2>
+      <div class="stats">Tentativas: <span id="memoryTentativas">0</span> | Pares: <span id="memoryPares">0</span>/8</div>
+      <div id="memoryGrid" style="display:grid; grid-template-columns:repeat(4,80px); gap:10px; justify-content:center; margin:20px 0;"></div>
+      <button onclick="iniciarMemory()">REINICIAR</button>
+      <button class="btn-voltar" onclick="voltarMenu()">Voltar</button>
+      
+      <div id="admin-memory" class="admin-panel hidden">
+        <h3>PAINEL ADMIN MEMORY 👑</h3>
+        <button onclick="revelarMemoryAdmin()">Revelar Tudo</button>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+let nomeJogador = '';
+let isAdmin = false;
+let jogoAtual = '';
+
+// LOGIN
+function entrar() {
+  nomeJogador = document.getElementById('nomeInput').value.trim();
+  if (!nomeJogador) return alert('Digita um nome!');
+  isAdmin = nomeJogador === 'BebelDev👑';
+  document.getElementById('nomeUser').textContent = nomeJogador;
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('menu').classList.remove('hidden');
+  document.getElementById('userBar').classList.remove('hidden');
+  localStorage.setItem('bielFunNome', nomeJogador);
+}
+
+function sair() {
+  location.reload();
+}
+
+// MENU
+function abrirJogo(jogo) {
+  jogoAtual = jogo;
+  document.getElementById('menu').classList.add('hidden');
+  document.getElementById('jogo-' + jogo).classList.remove('hidden');
+  if (isAdmin) document.getElementById('admin-' + jogo).classList.remove('hidden');
+  
+  // Inicia jogos específicos
+  if (jogo === 'snake') iniciarSnake();
+  if (jogo === 'flappy') iniciarFlappy();
+  if (jogo === 'memory') iniciarMemory();
+  if (jogo === 'alvo') document.getElementById('alvoBtn').style.display = 'none';
+}
+
+function voltarMenu() {
+  document.getElementById('jogo-' + jogoAtual).classList.add('hidden');
+  document.getElementById('menu').classList.remove('hidden');
+  if (snakeInterval) clearInterval(snakeInterval);
+  if (flappyInterval) clearInterval(flappyInterval);
+  if (alvoInterval) clearInterval(alvoInterval);
+}
+
+// CPS GAME
+let cpsCliques = 0, cpsTempo = 10, cpsRodando = false, cpsTimer;
+function clicarCPS() {
+  if (!cpsRodando) {
+    cpsRodando = true;
+    cpsCliques = 0;
+    let tempo = cpsTempo;
+    document.getElementById('cpsTempo').textContent = tempo;
+    cpsTimer = setInterval(() => {
+      tempo--;
+      document.getElementById('cpsTempo').textContent = tempo;
+      if (tempo <= 0) {
+        clearInterval(cpsTimer);
+        cpsRodando = false;
+        document.getElementById('cpsResult').textContent = (cpsCliques / cpsTempo).toFixed(2);
+      }
+    }, 1000);
+  }
+  if (cpsRodando) {
+    cpsCliques++;
+    document.getElementById('cpsCliques').textContent = cpsCliques;
+  }
+}
+function setCPSAdmin() {
+  cpsTempo = parseInt(document.getElementById('cpsTempoAdmin').value);
+  alert('Tempo do CPS alterado pra ' + cpsTempo + 's');
+}
+
+// REFLEXO GAME
+let reflexoEstado = 0, reflexoInicio, reflexoTimeout, reflexoMin = 1000, reflexoMax = 5000;
+function reflexoClick() {
+  if (reflexoEstado === 0) {
+    reflexoEstado = 1;
+    document.getElementById('reflexoMsg').textContent = 'Espere ficar VERDE...';
+    document.getElementById('reflexoBtn').style.background = '#ff4444';
+    let delay = Math.random() * (reflexoMax - reflexoMin) + reflexoMin;
+    reflexoTimeout = setTimeout(() => {
+      reflexoEstado = 2;
+      reflexoInicio = Date.now();
+      document.getElementById('reflexoMsg').textContent = 'CLICA AGORA!';
+      document.getElementById('reflexoBtn').style.background = '#00ff88';
+    }, delay);
+  } else if (reflexoEstado === 1) {
+    clearTimeout(reflexoTimeout);
+    reflexoEstado = 0;
+    document.getElementById('reflexoMsg').textContent = 'Muito cedo! Clique em INICIAR';
+    document.getElementById('reflexoBtn').style.background = '#00ff88';
+  } else if (reflexoEstado === 2) {
+    let tempo = Date.now() - reflexoInicio;
+    document.getElementById('reflexoTempo').textContent = tempo;
+    document.getElementById('reflexoMsg').textContent = 'Clique em INICIAR pra tentar de novo';
+    document.getElementById('reflexoBtn').style.background = '#00ff88';
+    reflexoEstado = 0;
+  }
+}
+function setReflexoAdmin() {
+  reflexoMin = parseInt(document.getElementById('reflexoMin').value);
+  reflexoMax = parseInt(document.getElementById('reflexoMax').value);
+  alert('Delay alterado: ' + reflexoMin + 'ms - ' + reflexoMax + 'ms');
+}
+
+// ROBUX GAME
+let robuxQtd = 0;
+function gerarRobux() {
+  let ganho = Math.floor(Math.random() * 100) + 10;
+  robuxQtd += ganho;
+  document.getElementById('robuxQtd').textContent = robuxQtd;
+  document.getElementById('robuxMsg').textContent = 'Você ganhou ' + ganho + ' Robux! KKK zoeira, isso não existe';
+}
+function addRobuxAdmin() {
+  robuxQtd += parseInt(document.getElementById('robuxAdd').value);
+  document.getElementById('robuxQtd').textContent = robuxQtd;
+}
+
+// SNAKE GAME
+let snake, snakeDir, snakeFood, snakeScore, snakeVel = 100, snakeInterval;
+function iniciarSnake() {
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  snake = [{x: 200, y: 200}];
+  snakeDir = 'right';
+  snakeScore = 0;
+  document.getElementById('snakeScore').textContent = 0;
+  gerarComida();
+  if (snakeInterval) clearInterval(snakeInterval);
+  snakeInterval = setInterval(() => {
+    let head = {...snake[0]};
+    if (snakeDir === 'right') head.x += 20;
+    if (snakeDir === 'left') head.x -= 20;
+    if (snakeDir === 'up') head.y -= 20;
+    if (snakeDir === 'down') head.y += 20;
+    
+    if (head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) {
+      clearInterval(snakeInterval);
+      alert('Game Over! Pontos: ' + snakeScore);
+      return;
+    }
+    
+    snake.unshift(head);
+    if (head.x === snakeFood.x && head.y === snakeFood.y) {
+      snakeScore += 10;
+      document.getElementById('snakeScore').textContent = snakeScore;
+      gerarComida();
+    } else {
+      snake.pop();
+    }
+    
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, 400, 400);
+    ctx.fillStyle = '#00ff88';
+    snake.forEach(s => ctx.fillRect(s.x, s.y, 18, 18));
+    ctx.fillStyle = '#ff4444';
+    ctx.fillRect(snakeFood.x, snakeFood.y, 18, 18);
+  }, snakeVel);
+}
+function gerarComida() {
+  snakeFood = {
+    x: Math.floor(Math.random() * 20) * 20,
+    y: Math.floor(Math.random() * 20) * 20
+  };
+}
+document.addEventListener('keydown', e => {
+  if (jogoAtual!== 'snake') return;
+  if (e.key === 'ArrowUp' && snakeDir!== 'down') snakeDir = 'up';
+  if (e.key === 'ArrowDown' && snakeDir!== 'up') snakeDir = 'down';
+  if (e.key === 'ArrowLeft' && snakeDir!== 'right') snakeDir = 'left';
+  if (e.key === 'ArrowRight' && snakeDir!== 'left') snakeDir = 'right';
+});
+function setSnakeAdmin() {
+  snakeVel = parseInt(document.getElementById('snakeVel').value);
+  alert('Velocidade alterada pra ' + snakeVel);
+}
+
+// FLAPPY BIRD
+let flappyY, flappyVel, flappyGrav = 0.5, flappyScore, flappyCanos, flappyInterval;
+function iniciarFlappy() {
+  const canvas = document.getElementById('flappyCanvas');
+  const ctx = canvas.getContext('2d');
+  flappyY = 250;
+  flappyVel = 0;
+  flappyScore = 0;
+  flappyCanos = [];
+  document.getElementById('flappyScore').textContent = 0;
+  
+  if (flappyInterval) clearInterval(flappyInterval);
+  flappyInterval = setInterval(() => {
+    flappyVel += flappyGrav;
+    flappyY += flappyVel;
+    
+    if (flappyCanos.length === 0 || flappyCanos[flappyCanos.length - 1].x < 250) {
+      flappyCanos.push({x: 400, gap: Math.random() * 200 + 100});
+    }
+    
+    flappyCanos.forEach(c => c.x -= 3);
+    if (flappyCanos[0].x < -50) {
+      flappyCanos.shift();
+      flappyScore++;
+      document.getElementById('flappyScore').textContent = flappyScore;
+    }
+    
+    // Colisão
+    if (flappyY < 0 || flappyY > 480) {
+      clearInterval(flappyInterval);
+      alert('Game Over! Pontos: ' + flappyScore);
+      return;
+    }
+    flappyCanos.forEach(c => {
+      if (30 < c.x + 50 && 50 > c.x && (flappyY < c.gap || flappyY > c.gap + 120)) {
+        clearInterval(flappyInterval);
+        alert('Game Over! Pontos: ' + flappyScore);
+      }
+    });
+    
+    // Desenhar
+    ctx.fillStyle = '#87CEEB';
+    ctx.fillRect(0, 0, 400, 500);
+    ctx.fillStyle = '#00ff88';
+    ctx.fillRect(30, flappyY, 20, 20);
+    ctx.fillStyle = '#00aa00';
+    flappyCanos.forEach(c => {
+      ctx.fillRect(c.x, 0, 50, c.gap);
+      ctx.fillRect(c.x, c.gap + 120, 50, 500);
+    });
+  }, 20);
+}
+document.addEventListener('keydown', e => {
+  if (jogoAtual === 'flappy' && e.code === 'Space') flappyVel = -8;
+});
+document.getElementById('flappyCanvas').addEventListener('click', () => {
+  if (jogoAtual === 'flappy') flappyVel = -8;
+});
+function setFlappyAdmin() {
+  flappyGrav = parseFloat(document.getElementById('flappyGrav').value);
+  alert('Gravidade alterada pra ' + flappyGrav);
+}
+
+// CLICK ALVO
+let alvoScore = 0, alvoTempo = 30, alvoInterval;
+function iniciarAlvo() {
+  alvoScore = 0;
+  alvoTempo = parseInt(document.getElementById('alvoTempoAdmin')?.value || 30);
+  document.getElementById('alvoScore').textContent = 0;
+  document.getElementById('alvoTempo').textContent = alvoTempo;
+  moverAlvo();
+  document.getElementById('alvoBtn').style.display = 'block';
+  
+  if (alvoInterval) clearInterval(alvoInterval);
+  alvoInterval = setInterval(() => {
+    alvoTempo--;
+    document.getElementById('alvoTempo').textContent = alvoTempo;
+    if (alvoTempo <= 0) {
+      clearInterval(alvoInterval);
+      document.getElementById('alvoBtn').style.display = 'none';
+      alert('Acabou! Pontos: ' + alvoScore);
+    }
+  }, 1000);
+}
+function acertarAlvo() {
+  alvoScore++;
+  document.getElementById('alvoScore').textContent = alvoScore;
+  moverAlvo();
+}
+function moverAlvo() {
+  const btn = document.getElementById('alvoBtn');
+  btn.style.left = Math.random() * 250 + 'px';
+  btn.style.top = Math.random() * 250 + 'px';
+}
+function setAlvoAdmin() {
+  alert('Tempo definido pra ' + document.getElementById('alvoTempoAdmin').value + 's no próximo jogo');
+}
+
+// MEMORY GAME
+let memoryCards, memoryFlipped, memoryTentativas, memoryPares;
+function iniciarMemory() {
+  const emojis = ['🎮','🎯','👑','🔥','⚡','💎','🚀','🎲'];
+  memoryCards = [...emojis,...emojis].sort(() => Math.random() - 0.5);
+  memoryFlipped = [];
+  memoryTentativas = 0;
+  memoryPares = 0;
+  document.getElementById('memoryTentativas').textContent = 0;
+  document.getElementById('memoryPares').textContent = 0;
+  
+  const grid = document.getElementById('memoryGrid');
+  grid.innerHTML = '';
+  memoryCards.forEach((emoji, i) => {
+    const card = document.createElement('button');
+    card.style.width = '80px';
+    card.style.height = '80px';
+    card.style.fontSize = '30px';
+    card.textContent = '?';
+    card.onclick = () => virarCard(i, card);
+    grid.appendChild(card);
+  });
+}
+function virarCard(i, card) {
+  if (memoryFlipped.length >= 2 || card.textContent!== '?') return;
+  card.textContent = memoryCards[i];
+  memoryFlipped.push({i, card});
+  
+  if (memoryFlipped.length === 2) {
+    memoryTentativas++;
+    document.getElementById('memoryTentativas').textContent = memoryTentativas;
+    setTimeout(() => {
+      if (memoryCards[memoryFlipped[0].i] === memoryCards[memoryFlipped[1].i]) {
+        memoryPares++;
+        document.getElementById('memoryPares').textContent = memoryPares;
+        if (memoryPares === 8) alert('Ganhou! Tentativas: ' + memoryTentativas);
+      } else {
+        memoryFlipped[0].card.textContent = '?';
+        memoryFlipped[1].card.textContent = '?';
+      }
+      memoryFlipped = [];
+    }, 500);
+  }
+}
+function revelarMemoryAdmin() {
+  document.querySelectorAll('#memoryGrid button').forEach((btn, i) => {
+    btn.textContent = memoryCards[i];
+  });
+}
+
+// Auto-login se já tem nome salvo
+window.onload = () => {
+  const nomeSalvo = localStorage.getItem('bielFunNome');
+  if (nomeSalvo) {
+    document.getElementById('nomeInput').value = nomeSalvo;
+  }
+}
+</script>
+</body>
   </html>
