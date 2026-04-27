@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biel.Fun</title>
+<title>Biel Fun</title>
 <style>
 body{margin:0;padding:0;background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#000}
 .hidden{display:none!important}
@@ -12,7 +12,7 @@ body{margin:0;padding:0;background:#fff;font-family:-apple-system,BlinkMacSystem
 .header p{font-size:20px;color:#666;margin:0}
 .container{max-width:1400px;margin:0 auto;padding:0 20px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:30px;padding:40px 0}
-.card{background:#f5f5f5;border-radius:20px;overflow:hidden;cursor:pointer;transition:all .2s ease}
+.card{background:#f5f5f5;border-radius:20px;overflow:hidden;cursor:pointer;transition:all .2s ease;text-decoration:none;color:inherit;display:block}
 .card:hover{transform:scale(1.02);box-shadow:0 20px 40px rgba(0,0,0,0.1)}
 .card img{width:100%;height:220px;object-fit:cover;display:block}
 .card-body{padding:20px}
@@ -25,16 +25,115 @@ body{margin:0;padding:0;background:#fff;font-family:-apple-system,BlinkMacSystem
 .login-box button{padding:16px 40px;font-size:18px;background:#000;color:#fff;border:none;border-radius:12px;cursor:pointer;font-weight:600}
 .admin{position:fixed;top:20px;right:20px;background:#f5f5f5;padding:15px 20px;border-radius:50px;z-index:100;font-size:14px}
 .admin button{background:#000;color:#fff;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;margin-left:10px;font-weight:600}
-.iframe-wrap{position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;z-index:9998}
-.iframe-wrap iframe{width:100%;height:100%;border:none}
-.close-btn{position:fixed;top:20px;right:20px;z-index:9999;background:#000;color:#fff;border:none;padding:12px 24px;border-radius:50px;cursor:pointer;font-weight:700;font-size:16px}
-@media(prefers-color-scheme:dark){body{background:#000;color:#fff}.header p{color:#999}.card{background:#111}.card p{color:#999}#login{background:#000}.login-box input{background:#111;border-color:#333;color:#fff}.login-box button{background:#fff;color:#000}.admin{background:#111}.admin button{background:#fff;color:#000}.iframe-wrap{background:#000}.close-btn{background:#fff;color:#000}}
+@media(prefers-color-scheme:dark){body{background:#000;color:#fff}.header p{color:#999}.card{background:#111}.card p{color:#999}#login{background:#000}.login-box input{background:#111;border-color:#333;color:#fff}.login-box button{background:#fff;color:#000}.admin{background:#111}.admin button{background:#fff;color:#000}}
 </style>
 </head>
 <body>
 <div id="login">
 <div class="login-box">
 <h1 style="font-size:48px;margin-bottom:10px">Biel Fun</h1>
+<input type="text" id="nomeInput" placeholder="Seu nome" maxlength="20">
+<br><button onclick="entrar()">Entrar</button>
+</div>
+</div>
+
+<div id="admin" class="admin hidden">
+👑 <span id="userName"></span> | <span id="userScore">0</span> pts
+<button onclick="sair()">Sair</button>
+</div>
+
+<div class="container">
+<div class="header">
+<h1>Biel Fun</h1>
+<p>Experimentos interativos</p>
+</div>
+<div class="grid" id="grid"></div>
+<div class="footer">Inspirado em neal.fun</div>
+</div>
+
+<script>
+let user = JSON.parse(localStorage.getItem('bielUser') || '{"nome":"","score":0,"admin":false}');
+
+const jogos = [
+{n:"Infinite Craft",d:"Combine elementos pra criar tudo que existe",i:"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",u:"https://neal.fun/infinite-craft/"},
+{n:"Draw a Perfect Circle",d:"Consegue desenhar um círculo perfeito?",i:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop",u:"https://neal.fun/perfect-circle/"},
+{n:"Spend Bill Gates' Money",d:"Gaste 100 bilhões de dólares",i:"https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=600&fit=crop",u:"https://neal.fun/spend/"},
+{n:"Asteroid Launcher",d:"Lance asteroides na Terra",i:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop",u:"https://neal.fun/asteroid-launcher/"},
+{n:"The Password Game",d:"Crie uma senha impossível",i:"https://images.unsplash.com/photo-1614064641938-3bbee52942c5?w=800&h=600&fit=crop",u:"https://neal.fun/password-game/"},
+{n:"Absurd Trolley Problems",d:"Dilemas morais absurdos",i:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",u:"https://neal.fun/absurd-trolley-problems/"},
+{n:"Life Stats",d:"Estatísticas da sua vida em tempo real",i:"https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",u:"https://neal.fun/life-stats/"},
+{n:"Size of Space",d:"Explore o tamanho do universo",i:"https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&h=600&fit=crop",u:"https://neal.fun/size-of-space/"},
+{n:"Who Was Alive?",d:"Quem estava vivo quando você nasceu?",i:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",u:"https://neal.fun/who-was-alive/"},
+{n:"Design the Next iPhone",d:"Desenhe o próximo iPhone",i:"https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=800&h=600&fit=crop",u:"https://neal.fun/design-the-next-iphone/"},
+{n:"Paper",d:"Um papel infinito pra desenhar",i:"https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop",u:"https://neal.fun/paper/"},
+{n:"Ambient Chaos",d:"Crie caos com sons ambientes",i:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",u:"https://neal.fun/ambient-chaos/"},
+{n:"Rocks",d:"Coleção de pedras virtuais",i:"https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=800&h=600&fit=crop",u:"https://neal.fun/rocks/"},
+{n:"Days Since Incident",d:"Contador de dias sem acidentes",i:"https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=600&fit=crop",u:"https://neal.fun/days-since-incident/"},
+{n:"Ten Years Ago",d:"Como era a internet há 10 anos",i:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=600&fit=crop",u:"https://neal.fun/ten-years-ago/"},
+{n:"Universe Forecast",d:"Previsão do tempo do universo",i:"https://images.unsplash.com/photo-1464802686167-b939a6910659?w=800&h=600&fit=crop",u:"https://neal.fun/universe-forecast/"},
+{n:"Progress",d:"Barra de progresso da vida",i:"https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop",u:"https://neal.fun/progress/"},
+{n:"Internet Artifacts",d:"Artefatos antigos da internet",i:"https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=600&fit=crop",u:"https://neal.fun/internet-artifacts/"},
+{n:"Wonders of Street View",d:"Lugares incríveis no Google Street View",i:"https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",u:"https://neal.fun/wonders-of-street-view/"},
+{n:"The Deep Sea",d:"Role pra baixo e explore o oceano",i:"https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&h=600&fit=crop",u:"https://neal.fun/deep-sea/"},
+{n:"Space Elevator",d:"Suba um elevador até o espaço",i:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop",u:"https://neal.fun/space-elevator/"},
+{n:"Auction Game",d:"Leilão de itens malucos",i:"https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=600&fit=crop",u:"https://neal.fun/auction-game/"},
+{n:"Let's Settle This",d:"Resolva discussões com dados",i:"https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&h=600&fit=crop",u:"https://neal.fun/lets-settle-this/"},
+{n:"Earth Reviews",d:"Avaliações do planeta Terra",i:"https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=800&h=600&fit=crop",u:"https://neal.fun/earth-reviews/"},
+{n:"Baby Map",d:"Nascimentos em tempo real no mundo",i:"https://images.unsplash.com/photo-1522770179533-24471fcdba45?w=800&h=600&fit=crop",u:"https://neal.fun/baby-map/"},
+{n:"Share This Page",d:"Botões de compartilhar infinitos",i:"https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=600&fit=crop",u:"https://neal.fun/share-this-page/"},
+{n:"Where Does the Day Go?",d:"Visualize onde seu dia vai parar",i:"https://images.unsplash.com/photo-1501139083538-0139583c060f?w=800&h=600&fit=crop",u:"https://neal.fun/where-does-the-day-go/"},
+{n:"Printing Money",d:"Imprima dinheiro infinito",i:"https://images.unsplash.com/photo-1579621970795-87facc2f976d?w=800&h=600&fit=crop",u:"https://neal.fun/printing-money/"},
+{n:"Logos from Memory",d:"Desenhe logos famosos de memória",i:"https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=600&fit=crop",u:"https://neal.fun/logos-from-memory/"},
+{n:"Days",d:"Visualize sua vida em dias",i:"https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&h=600&fit=crop",u:"https://neal.fun/days/"},
+{n:"Sell Sell Sell",d:"Jogo de vender coisas",i:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",u:"https://neal.fun/sell-sell-sell/"},
+{n:"Stimulating Clicker",d:"Clicker super satisfatório",i:"https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=600&fit=crop",u:"https://neal.fun/stimulating-clicker/"}
+];
+
+function init(){
+if(user.nome){
+document.getElementById('login').classList.add('hidden');
+document.getElementById('admin').classList.remove('hidden');
+document.getElementById('userName').textContent = user.nome;
+document.getElementById('userScore').textContent = user.score;
+}
+renderGrid();
+}
+
+function renderGrid(){
+document.getElementById('grid').innerHTML = jogos.map(j=>`
+<a class="card" href="${j.u}" target="_blank" onclick="addPonto()">
+<img src="${j.i}" alt="${j.n}">
+<div class="card-body">
+<h3>${j.n}</h3>
+<p>${j.d}</p>
+</div>
+</a>
+`).join('');
+}
+
+function entrar(){
+let nome = document.getElementById('nomeInput').value.trim();
+if(!nome)return;
+user = {nome:nome,score:0,admin:nome==='BebelDev👑'};
+localStorage.setItem('bielUser',JSON.stringify(user));
+init();
+}
+
+function sair(){
+localStorage.removeItem('bielUser');
+location.reload();
+}
+
+function addPonto(){
+user.score+=10;
+localStorage.setItem('bielUser',JSON.stringify(user));
+document.getElementById('userScore').textContent = user.score;
+}
+
+init();
+</script>
+</body>
+</html><h1 style="font-size:48px;margin-bottom:10px">Biel Fun</h1>
 <input type="text" id="nomeInput" placeholder="Seu nome" maxlength="20">
 <br><button onclick="entrar()">Entrar</button>
 </div>
