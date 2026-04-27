@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Biel Fun</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -13,7 +13,7 @@ body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rob
 .header p{font-size:20px;color:#666;margin:0}
 .container{max-width:1400px;margin:0 auto;padding:0 20px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:30px;padding:40px 0}
-.card{background:#f5f5f5;border-radius:20px;overflow:hidden;cursor:pointer;transition:all.2s ease}
+.card{background:#f5f5f5;border-radius:20px;overflow:hidden;cursor:pointer;transition:.2s}
 .card:hover{transform:scale(1.02)}
 .card img{width:100%;height:220px;object-fit:cover;display:block}
 .card-body{padding:20px}
@@ -22,21 +22,21 @@ body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rob
 #login{position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999}
 .login-box{text-align:center}
 .login-box h1{font-size:48px;margin-bottom:30px}
-.login-box input{padding:16px 24px;font-size:18px;border:2px solid #ddd;border-radius:12px;width:280px;margin:10px}
-.login-box button{padding:16px 40px;font-size:18px;background:#000;color:#fff;border:none;border-radius:12px;cursor:pointer;font-weight:600;margin:10px}
+.login-box input{padding:16px 24px;font-size:18px;border:2px solid #ddd;border-radius:12px;width:280px}
+.login-box button{padding:16px 40px;font-size:18px;background:#000;color:#fff;border:none;border-radius:12px;cursor:pointer;font-weight:600;margin-left:10px}
 .admin{position:fixed;top:20px;right:20px;background:#f5f5f5;padding:15px 20px;border-radius:50px;z-index:100;font-size:14px}
 .admin button{background:#000;color:#fff;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;margin-left:10px;font-weight:600}
 .game-view{position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;z-index:9998;overflow:auto}
-.close-btn{position:fixed;top:20px;right:20px;z-index:9999;background:#000;color:#fff;border:none;padding:12px 24px;border-radius:50px;cursor:pointer;font-weight:700;font-size:16px}
+.close-btn{position:fixed;top:20px;right:20px;z-index:9999;background:#000;color:#fff;border:none;padding:12px 24px;border-radius:50px;cursor:pointer;font-weight:700}
 .craft-container{max-width:1200px;margin:80px auto 40px;padding:20px}
-.craft-top{display:flex;justify-content:center;align-items:center;gap:15px;margin-bottom:40px}
-.craft-slot{background:#fff;border:2px solid #000;border-radius:12px;padding:12px 20px;font-size:18px;font-weight:600;cursor:pointer;min-width:120px;text-align:center;transition:.2s}
+.craft-top{display:flex;justify-content:center;align-items:center;gap:15px;margin-bottom:40px;flex-wrap:wrap}
+.craft-slot{background:#fff;border:2px solid #000;border-radius:12px;padding:12px 20px;font-size:18px;font-weight:600;cursor:pointer;min-width:120px;text-align:center}
 .craft-slot.active{background:#000;color:#fff}
 .craft-plus{font-size:24px;font-weight:700}
-.craft-equals{font-size:24px;font-weight:700;margin:0 10px}
-.craft-result{background:#fff;border:2px solid #000;border-radius:12px;padding:12px 20px;font-size:18px;font-weight:600;min-width:120px;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center}
+.craft-equals{font-size:24px;font-weight:700}
+.craft-result{background:#fff;border:2px solid #000;border-radius:12px;padding:12px 20px;font-size:18px;font-weight:600;min-width:120px;min-height:48px;display:flex;align-items:center;justify-content:center;flex-direction:column}
 .elements-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:30px}
-.element{background:#fff;border:2px solid #000;border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:.2s;font-weight:600;font-size:16px}
+.element{background:#fff;border:2px solid #000;border-radius:12px;padding:12px;text-align:center;cursor:pointer;font-weight:600;font-size:16px}
 .element:hover{background:#f5f5f5;transform:translateY(-2px)}
 .element-emoji{font-size:28px;display:block;margin-bottom:6px}
 .admin-craft{background:#1a0033;color:#fff;padding:20px;border-radius:16px;margin:20px 0;border:2px solid #aa00ff}
@@ -47,7 +47,6 @@ body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rob
 .modal-box{background:#fff;padding:40px;border-radius:20px;text-align:center;max-width:500px}
 .modal-box h2{font-size:32px;margin-bottom:30px}
 .modal-box button{display:block;width:100%;padding:20px;font-size:18px;background:#000;color:#fff;border:none;border-radius:12px;cursor:pointer;font-weight:700;margin:10px 0}
-.modal-box button:hover{background:#333}
 @media(prefers-color-scheme:dark){body{background:#000;color:#fff}.header p{color:#999}.card{background:#111}.card p{color:#999}#login{background:#000}.login-box input{background:#111;border-color:#333;color:#fff}.login-box button{background:#fff;color:#000}.admin{background:#111}.admin button{background:#fff;color:#000}.game-view{background:#000}.close-btn{background:#fff;color:#000}.craft-slot{background:#111;border-color:#fff;color:#fff}.craft-slot.active{background:#fff;color:#000}.craft-result{background:#111;border-color:#fff}.element{background:#111;border-color:#fff;color:#fff}.element:hover{background:#222}.modal-box{background:#111;color:#fff}.modal-box button{background:#fff;color:#000}}
 </style>
 </head>
@@ -56,24 +55,14 @@ body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rob
 <div class="login-box">
 <h1>Biel Fun</h1>
 <input type="text" id="nomeInput" placeholder="Seu nome" maxlength="20">
-<br>
 <button onclick="entrar()">Entrar</button>
 </div>
 </div>
-
-<div id="admin" class="admin hidden">
-👑 <span id="userName"></span> | <span id="userScore">0</span> pts
-<button onclick="sair()">Sair</button>
-</div>
-
+<div id="admin" class="admin hidden">👑 <span id="userName"></span> | <span id="userScore">0</span> pts<button onclick="sair()">Sair</button></div>
 <div class="container" id="hub">
-<div class="header">
-<h1>Biel Fun</h1>
-<p>Experimentos interativos</p>
-</div>
+<div class="header"><h1>Biel Fun</h1><p>Experimentos interativos</p></div>
 <div class="grid" id="grid"></div>
 </div>
-
 <div id="modalEscolha" class="modal hidden">
 <div class="modal-box">
 <h2>Escolha a versão</h2>
@@ -82,587 +71,35 @@ body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rob
 <button onclick="fecharModal()" style="background:#666">Cancelar</button>
 </div>
 </div>
-
 <div id="gameView" class="game-view hidden">
 <button class="close-btn" onclick="fechar()">✕ Fechar</button>
 <div id="gameContent"></div>
 </div>
-
 <script>
-let user = JSON.parse(localStorage.getItem('bielUser') || '{"nome":"","score":0,"admin":false}');
-
-// Elementos com nome + emoji "desenhado" igual neal
-let elements = [
-{emoji:'💧',nome:'Água'},
-{emoji:'🔥',nome:'Fogo'},
-{emoji:'🌍',nome:'Terra'},
-{emoji:'💨',nome:'Ar'}
-];
-
-let combos = {
-'Água+Fogo':'Vapor','Fogo+Água':'Vapor',
-'Água+Terra':'Planta','Terra+Água':'Planta',
-'Fogo+Terra':'Lava','Terra+Fogo':'Lava',
-'Ar+Fogo':'Energia','Fogo+Ar':'Energia',
-'Ar+Terra':'Poeira','Terra+Ar':'Poeira',
-'Ar+Água':'Nuvem','Água+Ar':'Nuvem',
-'Planta+Fogo':'Fumaça','Fogo+Planta':'Fumaça',
-'Lava+Água':'Pedra','Água+Lava':'Pedra',
-'Nuvem+Nuvem':'Chuva',
-'Energia+Terra':'Eletricidade','Terra+Energia':'Eletricidade',
-'Pedra+Fogo':'Metal','Fogo+Pedra':'Metal',
-'Metal+Energia':'Robô','Energia+Metal':'Robô',
-'Robô+Robô':'BielDev',
-'Chuva+Terra':'Flor','Terra+Chuva':'Flor',
-'Flor+Fogo':'Buquê','Fogo+Flor':'Buquê',
-// O meme do neal: lama = 💩
-'Água+Terra':'Lama','Terra+Água':'Lama',
-'Lama+Lama':'Porco',
-'Porco+Porco':'Fazenda'
-};
-
-let emojiMap = {
-'Vapor':'💨','Planta':'🌱','Lava':'🌋','Energia':'⚡','Poeira':'🌪️','Nuvem':'☁️',
-'Fumaça':'💨','Pedra':'🪨','Chuva':'🌧️','Eletricidade':'🔌','Metal':'⚙️','Robô':'🤖',
-'BielDev':'👑','Flor':'🌸','Buquê':'💐','Lama':'💩','Porco':'🐷','Fazenda':'🚜'
-};
-
-let selectedSlot = 0;
-let slots = [null,null];
-
-const jogos = [
-{n:"Infinite Craft",d:"Combine elementos pra criar tudo que existe",i:"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",u:"craft"},
-{n:"Spend Bill Gates' Money",d:"Gaste 100 bilhões de dólares",i:"https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=600&fit=crop",u:"https://neal.fun/spend/"},
-{n:"Draw a Perfect Circle",d:"Consegue desenhar um círculo perfeito?",i:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop",u:"https://neal.fun/perfect-circle/"},
-{n:"Asteroid Launcher",d:"Lance asteroides na Terra",i:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop",u:"https://neal.fun/asteroid-launcher/"}
-];
-
-function init(){
-if(user.nome){
-document.getElementById('login').classList.add('hidden');
-document.getElementById('admin').classList.remove('hidden');
-document.getElementById('userName').textContent = user.nome;
-document.getElementById('userScore').textContent = user.score;
-}
-renderGrid();
-}
-
-function renderGrid(){
-document.getElementById('grid').innerHTML = jogos.map(j=>`
-<div class="card" onclick="abrir('${j.u}')">
-<img src="${j.i}" alt="${j.n}">
-<div class="card-body">
-<h3>${j.n}</h3>
-<p>${j.d}</p>
-</div>
-</div>
-`).join('');
-}
-
-function entrar(){
-let nome = document.getElementById('nomeInput').value.trim();
-if(!nome){alert('Digita um nome!');return}
-user = {nome:nome,score:0,admin:nome==='BebelDev👑'};
-localStorage.setItem('bielUser',JSON.stringify(user));
-init();
-}
-
-function sair(){
-localStorage.removeItem('bielUser');
-location.reload();
-}
-
-function abrir(url){
-if(url==='craft'){
-if(user.admin){
-document.getElementById('modalEscolha').classList.remove('hidden');
-}else{
-window.open('https://neal.fun/infinite-craft/','_blank');
-addPonto();
-}
-}else{
-window.open(url,'_blank');
-addPonto();
-}
-}
-
-function abrirNealCraft(){
-window.open('https://neal.fun/infinite-craft/','_blank');
-fecharModal();
-addPonto();
-}
-
-function abrirBebelCraft(){
-document.getElementById('gameView').classList.remove('hidden');
-fecharModal();
-renderCraft();
-addPonto();
-}
-
-function fecharModal(){
-document.getElementById('modalEscolha').classList.add('hidden');
-}
-
-function addPonto(){
-user.score+=10;
-localStorage.setItem('bielUser',JSON.stringify(user));
-document.getElementById('userScore').textContent = user.score;
-}
-
-function renderCraft(){
-let adminPanel = user.admin? `
-<div class="admin-craft">
-<h3>👑 PAINEL ADMIN BIEL CRAFT</h3>
-<p>Cria qualquer elemento sem precisar dos 2 itens:</p>
-<input type="text" id="adminCraftName" placeholder="Ex: Diamante">
-<button onclick="adminCraft()">Criar Elemento</button>
-<button onclick="desbloquearTudo()">Desbloquear Tudo</button>
-</div>
-` : '';
-
-document.getElementById('gameContent').innerHTML = `
-<div class="craft-container">
-${adminPanel}
-<div class="craft-top">
-<div class="craft-slot ${selectedSlot===0?'active':''}" onclick="selectSlot(0)">
-${slots[0]?`<div class="element-emoji">${slots[0].emoji}</div>${slots[0].nome}`:'?'}
-</div>
-<div class="craft-plus">+</div>
-<div class="craft-slot ${selectedSlot===1?'active':''}" onclick="selectSlot(1)">
-${slots[1]?`<div class="element-emoji">${slots[1].emoji}</div>${slots[1].nome}`:'?'}
-</div>
-<div class="craft-equals">=</div>
-<div class="craft-result" id="result"></div>
-</div>
-<div class="elements-grid">${elements.map(e=>`<div class="element" onclick='addElement(${JSON.stringify(e)})'><div class="element-emoji">${e.emoji}</div>${e.nome}</div>`).join('')}</div>
-</div>
-`;
-}
-
+let user=JSON.parse(localStorage.getItem('bielUser')||'{"nome":"","score":0,"admin":false}');
+let elements=[{emoji:'💧',nome:'Água'},{emoji:'🔥',nome:'Fogo'},{emoji:'🌍',nome:'Terra'},{emoji:'💨',nome:'Ar'}];
+let combos={'Água+Fogo':'Vapor','Fogo+Água':'Vapor','Água+Terra':'Lama','Terra+Água':'Lama','Fogo+Terra':'Lava','Terra+Fogo':'Lava','Ar+Fogo':'Energia','Fogo+Ar':'Energia','Ar+Terra':'Poeira','Terra+Ar':'Poeira','Ar+Água':'Nuvem','Água+Ar':'Nuvem','Lava+Água':'Pedra','Água+Lava':'Pedra','Nuvem+Nuvem':'Chuva','Pedra+Fogo':'Metal','Fogo+Pedra':'Metal','Metal+Energia':'Robô','Energia+Metal':'Robô','Robô+Robô':'BielDev','Chuva+Terra':'Flor','Terra+Chuva':'Flor','Lama+Lama':'Porco','Porco+Porco':'Fazenda'};
+let emojiMap={'Vapor':'💨','Lama':'💩','Lava':'🌋','Energia':'⚡','Poeira':'🌪️','Nuvem':'☁️','Pedra':'🪨','Chuva':'🌧️','Metal':'⚙️','Robô':'🤖','BielDev':'👑','Flor':'🌸','Porco':'🐷','Fazenda':'🚜'};
+let selectedSlot=0,slots=[null,null];
+const jogos=[{n:"Infinite Craft",d:"Combine elementos pra criar tudo que existe",i:"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",u:"craft"},{n:"Spend Bill Gates' Money",d:"Gaste 100 bilhões de dólares",i:"https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=600&fit=crop",u:"https://neal.fun/spend/"},{n:"Draw a Perfect Circle",d:"Consegue desenhar um círculo perfeito?",i:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop",u:"https://neal.fun/perfect-circle/"},{n:"Asteroid Launcher",d:"Lance asteroides na Terra",i:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop",u:"https://neal.fun/asteroid-launcher/"},{n:"The Password Game",d:"Crie uma senha impossível",i:"https://images.unsplash.com/photo-1614064641938-3bbee52942c5?w=800&h=600&fit=crop",u:"https://neal.fun/password-game/"},{n:"Size of Space",d:"Explore o tamanho do universo",i:"https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&h=600&fit=crop",u:"https://neal.fun/size-of-space/"},{n:"The Deep Sea",d:"Role pra baixo e explore o oceano",i:"https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&h=600&fit=crop",u:"https://neal.fun/deep-sea/"}];
+function init(){if(user.nome){document.getElementById('login').classList.add('hidden');document.getElementById('admin').classList.remove('hidden');document.getElementById('userName').textContent=user.nome;document.getElementById('userScore').textContent=user.score}renderGrid()}
+function renderGrid(){document.getElementById('grid').innerHTML=jogos.map(j=>`<div class="card" onclick="abrir('${j.u}')"><img src="${j.i}" alt="${j.n}"><div class="card-body"><h3>${j.n}</h3><p>${j.d}</p></div></div>`).join('')}
+function entrar(){let nome=document.getElementById('nomeInput').value.trim();if(!nome){alert('Digita um nome!');return}user={nome:nome,score:0,admin:nome==='BebelDev👑'};localStorage.setItem('bielUser',JSON.stringify(user));init()}
+function sair(){localStorage.removeItem('bielUser');location.reload()}
+function abrir(url){if(url==='craft'){if(user.admin){document.getElementById('modalEscolha').classList.remove('hidden')}else{window.open('https://neal.fun/infinite-craft/','_blank');addPonto()}}else{window.open(url,'_blank');addPonto()}}
+function abrirNealCraft(){window.open('https://neal.fun/infinite-craft/','_blank');fecharModal();addPonto()}
+function abrirBebelCraft(){document.getElementById('gameView').classList.remove('hidden');fecharModal();renderCraft();addPonto()}
+function fecharModal(){document.getElementById('modalEscolha').classList.add('hidden')}
+function addPonto(){user.score+=10;localStorage.setItem('bielUser',JSON.stringify(user));document.getElementById('userScore').textContent=user.score}
+function renderCraft(){let adminPanel=user.admin?`<div class="admin-craft"><h3>👑 PAINEL ADMIN BIEL CRAFT</h3><p>Cria qualquer elemento sem precisar dos 2 itens:</p><input type="text" id="adminCraftName" placeholder="Ex: Diamante"><button onclick="adminCraft()">Criar Elemento</button><button onclick="desbloquearTudo()">Desbloquear Tudo</button></div>`:'';document.getElementById('gameContent').innerHTML=`<div class="craft-container">${adminPanel}<div class="craft-top"><div class="craft-slot ${selectedSlot===0?'active':''}" onclick="selectSlot(0)">${slots[0]?`<div class="element-emoji">${slots[0].emoji}</div>${slots[0].nome}`:'?'}</div><div class="craft-plus">+</div><div class="craft-slot ${selectedSlot===1?'active':''}" onclick="selectSlot(1)">${slots[1]?`<div class="element-emoji">${slots[1].emoji}</div>${slots[1].nome}`:'?'}</div><div class="craft-equals">=</div><div class="craft-result" id="result"></div></div><div class="elements-grid">${elements.map(e=>`<div class="element" onclick='addElement(${JSON.stringify(e)})'><div class="element-emoji">${e.emoji}</div>${e.nome}</div>`).join('')}</div></div>`}
 function selectSlot(i){selectedSlot=i;renderCraft()}
 function addElement(e){slots[selectedSlot]=e;renderCraft()}
 function limpar(){slots=[null,null];document.getElementById('result').innerHTML='';renderCraft()}
-
-function combinar(){
-if(!slots[0]||!slots[1])return;
-let key = slots[0].nome+'+'+slots[1].nome;
-let result = combos;
-if(result){
-let emoji = emojiMap[result]||'✨';
-document.getElementById('result').innerHTML = `<div class="element-emoji">${emoji}</div>${result}`;
-if(!elements.find(e=>e.nome===result)){
-elements.push({emoji:emoji,nome:result});
-user.score+=50;
-localStorage.setItem('bielUser',JSON.stringify(user));
-document.getElementById('userScore').textContent = user.score;
-}
-setTimeout(()=>{limpar();renderCraft()},1200);
-}else{
-document.getElementById('result').innerHTML = 'Nada';
-}
-}
-
-function adminCraft(){
-let nome = document.getElementById('adminCraftName').value.trim();
-if(!nome)return;
-if(!elements.find(e=>e.nome===nome)){
-elements.push({emoji:'✨',nome:nome});
-alert('Elemento '+nome+' criado!');
-renderCraft();
-}
-}
-
-function desbloquearTudo(){
-Object.entries(combos).forEach(([k,v])=>{
-if(!elements.find(e=>e.nome===v)){
-elements.push({emoji:emojiMap[v]||'✨',nome:v});
-}
-});
-alert('Todos elementos desbloqueados!');
-renderCraft();
-}
-
-function fechar(){
-document.getElementById('gameView').classList.add('hidden');
-slots=[null,null];
-}
-
+function combinar(){if(!slots[0]||!slots[1])return;let key=slots[0].nome+'+'+slots[1].nome;let result=combos[key];if(result){let emoji=emojiMap[result]||'✨';document.getElementById('result').innerHTML=`<div class="element-emoji">${emoji}</div>${result}`;if(!elements.find(e=>e.nome===result)){elements.push({emoji:emoji,nome:result});user.score+=50;localStorage.setItem('bielUser',JSON.stringify(user));document.getElementById('userScore').textContent=user.score}setTimeout(()=>{limpar();renderCraft()},1200)}else{document.getElementById('result').innerHTML='Nada'}}
+function adminCraft(){let nome=document.getElementById('adminCraftName').value.trim();if(!nome)return;if(!elements.find(e=>e.nome===nome)){elements.push({emoji:'✨',nome:nome});alert('Elemento '+nome+' criado!');renderCraft()}}
+function desbloquearTudo(){Object.entries(combos).forEach(([k,v])=>{if(!elements.find(e=>e.nome===v)){elements.push({emoji:emojiMap[v]||'✨',nome:v})}});alert('Todos elementos desbloqueados!');renderCraft()}
+function fechar(){document.getElementById('gameView').classList.add('hidden');slots=[null,null]}
 init();
-</script>
-</body>
-</html></div>
-</div>
-
-<div id="admin" class="admin hidden">
-👑 <span id="userName"></span> | <span id="userScore">0</span> pts
-<button onclick="sair()">Sair</button>
-</div>
-
-<div class="container">
-<div class="header">
-<h1>Biel Fun</h1>
-<p>Experimentos interativos</p>
-</div>
-<div class="grid" id="grid"></div>
-<div class="footer">Inspirado em neal.fun</div>
-</div>
-
-<script>
-let user = JSON.parse(localStorage.getItem('bielUser') || '{"nome":"","score":0,"admin":false}');
-
-const jogos = [
-{n:"Infinite Craft",d:"Combine elementos pra criar tudo que existe",i:"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",u:"https://neal.fun/infinite-craft/"},
-{n:"Draw a Perfect Circle",d:"Consegue desenhar um círculo perfeito?",i:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop",u:"https://neal.fun/perfect-circle/"},
-{n:"Spend Bill Gates' Money",d:"Gaste 100 bilhões de dólares",i:"https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=600&fit=crop",u:"https://neal.fun/spend/"},
-{n:"Asteroid Launcher",d:"Lance asteroides na Terra",i:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop",u:"https://neal.fun/asteroid-launcher/"},
-{n:"The Password Game",d:"Crie uma senha impossível",i:"https://images.unsplash.com/photo-1614064641938-3bbee52942c5?w=800&h=600&fit=crop",u:"https://neal.fun/password-game/"},
-{n:"Absurd Trolley Problems",d:"Dilemas morais absurdos",i:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",u:"https://neal.fun/absurd-trolley-problems/"},
-{n:"Life Stats",d:"Estatísticas da sua vida em tempo real",i:"https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",u:"https://neal.fun/life-stats/"},
-{n:"Size of Space",d:"Explore o tamanho do universo",i:"https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&h=600&fit=crop",u:"https://neal.fun/size-of-space/"},
-{n:"Who Was Alive?",d:"Quem estava vivo quando você nasceu?",i:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",u:"https://neal.fun/who-was-alive/"},
-{n:"Design the Next iPhone",d:"Desenhe o próximo iPhone",i:"https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=800&h=600&fit=crop",u:"https://neal.fun/design-the-next-iphone/"},
-{n:"Paper",d:"Um papel infinito pra desenhar",i:"https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop",u:"https://neal.fun/paper/"},
-{n:"Ambient Chaos",d:"Crie caos com sons ambientes",i:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",u:"https://neal.fun/ambient-chaos/"},
-{n:"Rocks",d:"Coleção de pedras virtuais",i:"https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=800&h=600&fit=crop",u:"https://neal.fun/rocks/"},
-{n:"Days Since Incident",d:"Contador de dias sem acidentes",i:"https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=600&fit=crop",u:"https://neal.fun/days-since-incident/"},
-{n:"Ten Years Ago",d:"Como era a internet há 10 anos",i:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=600&fit=crop",u:"https://neal.fun/ten-years-ago/"},
-{n:"Universe Forecast",d:"Previsão do tempo do universo",i:"https://images.unsplash.com/photo-1464802686167-b939a6910659?w=800&h=600&fit=crop",u:"https://neal.fun/universe-forecast/"},
-{n:"Progress",d:"Barra de progresso da vida",i:"https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop",u:"https://neal.fun/progress/"},
-{n:"Internet Artifacts",d:"Artefatos antigos da internet",i:"https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=600&fit=crop",u:"https://neal.fun/internet-artifacts/"},
-{n:"Wonders of Street View",d:"Lugares incríveis no Google Street View",i:"https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",u:"https://neal.fun/wonders-of-street-view/"},
-{n:"The Deep Sea",d:"Role pra baixo e explore o oceano",i:"https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&h=600&fit=crop",u:"https://neal.fun/deep-sea/"},
-{n:"Space Elevator",d:"Suba um elevador até o espaço",i:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop",u:"https://neal.fun/space-elevator/"},
-{n:"Auction Game",d:"Leilão de itens malucos",i:"https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=600&fit=crop",u:"https://neal.fun/auction-game/"},
-{n:"Let's Settle This",d:"Resolva discussões com dados",i:"https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&h=600&fit=crop",u:"https://neal.fun/lets-settle-this/"},
-{n:"Earth Reviews",d:"Avaliações do planeta Terra",i:"https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=800&h=600&fit=crop",u:"https://neal.fun/earth-reviews/"},
-{n:"Baby Map",d:"Nascimentos em tempo real no mundo",i:"https://images.unsplash.com/photo-1522770179533-24471fcdba45?w=800&h=600&fit=crop",u:"https://neal.fun/baby-map/"},
-{n:"Share This Page",d:"Botões de compartilhar infinitos",i:"https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=600&fit=crop",u:"https://neal.fun/share-this-page/"},
-{n:"Where Does the Day Go?",d:"Visualize onde seu dia vai parar",i:"https://images.unsplash.com/photo-1501139083538-0139583c060f?w=800&h=600&fit=crop",u:"https://neal.fun/where-does-the-day-go/"},
-{n:"Printing Money",d:"Imprima dinheiro infinito",i:"https://images.unsplash.com/photo-1579621970795-87facc2f976d?w=800&h=600&fit=crop",u:"https://neal.fun/printing-money/"},
-{n:"Logos from Memory",d:"Desenhe logos famosos de memória",i:"https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=600&fit=crop",u:"https://neal.fun/logos-from-memory/"},
-{n:"Days",d:"Visualize sua vida em dias",i:"https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&h=600&fit=crop",u:"https://neal.fun/days/"},
-{n:"Sell Sell Sell",d:"Jogo de vender coisas",i:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",u:"https://neal.fun/sell-sell-sell/"},
-{n:"Stimulating Clicker",d:"Clicker super satisfatório",i:"https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=600&fit=crop",u:"https://neal.fun/stimulating-clicker/"}
-];
-
-function init(){
-if(user.nome){
-document.getElementById('login').classList.add('hidden');
-document.getElementById('admin').classList.remove('hidden');
-document.getElementById('userName').textContent = user.nome;
-document.getElementById('userScore').textContent = user.score;
-}
-renderGrid();
-}
-
-function renderGrid(){
-document.getElementById('grid').innerHTML = jogos.map(j=>`
-<a class="card" href="${j.u}" target="_blank" onclick="addPonto()">
-<img src="${j.i}" alt="${j.n}">
-<div class="card-body">
-<h3>${j.n}</h3>
-<p>${j.d}</p>
-</div>
-</a>
-`).join('');
-}
-
-function entrar(){
-let nome = document.getElementById('nomeInput').value.trim();
-if(!nome)return;
-user = {nome:nome,score:0,admin:nome==='BebelDev👑'};
-localStorage.setItem('bielUser',JSON.stringify(user));
-init();
-}
-
-function sair(){
-localStorage.removeItem('bielUser');
-location.reload();
-}
-
-function addPonto(){
-user.score+=10;
-localStorage.setItem('bielUser',JSON.stringify(user));
-document.getElementById('userScore').textContent = user.score;
-}
-
-init();
-</script>
-</body>
-</html><h1 style="font-size:48px;margin-bottom:10px">Biel Fun</h1>
-<input type="text" id="nomeInput" placeholder="Seu nome" maxlength="20">
-<br><button onclick="entrar()">Entrar</button>
-</div>
-</div>
-
-<div id="admin" class="admin hidden">
-👑 <span id="userName"></span> | <span id="userScore">0</span> pts
-<button onclick="sair()">Sair</button>
-</div>
-
-<div class="container">
-<div class="header">
-<h1>Biel.Fun</h1>
-<p>Experimentos interativos</p>
-</div>
-<div class="grid" id="grid"></div>
-<div class="footer">Inspirado em neal.fun</div>
-</div>
-
-<div id="gameView" class="iframe-wrap hidden">
-<button class="close-btn" onclick="fechar()">✕ Fechar</button>
-<iframe id="gameFrame" src=""></iframe>
-</div>
-
-<script>
-let user = JSON.parse(localStorage.getItem('bielUser') || '{"nome":"","score":0,"admin":false}');
-
-// TODOS OS JOGOS DO NEAL.FUN ATÉ OUT/2025
-const jogos = [
-{n:"Infinite Craft",d:"Combine elementos pra criar tudo",i:"https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",u:"https://neal.fun/infinite-craft/"},
-{n:"Draw a Perfect Circle",d:"Consegue desenhar um círculo perfeito?",i:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=600&fit=crop",u:"https://neal.fun/perfect-circle/"},
-{n:"Spend Bill Gates' Money",d:"Gaste 100 bilhões de dólares",i:"https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=600&fit=crop",u:"https://neal.fun/spend/"},
-{n:"Asteroid Launcher",d:"Lance asteroides na Terra",i:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&h=600&fit=crop",u:"https://neal.fun/asteroid-launcher/"},
-{n:"The Password Game",d:"Crie uma senha impossível",i:"https://images.unsplash.com/photo-1614064641938-3bbee52942c5?w=800&h=600&fit=crop",u:"https://neal.fun/password-game/"},
-{n:"Absurd Trolley Problems",d:"Dilemas morais absurdos",i:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop",u:"https://neal.fun/absurd-trolley-problems/"},
-{n:"Life Stats",d:"Estatísticas da sua vida em tempo real",i:"https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",u:"https://neal.fun/life-stats/"},
-{n:"Size of Space",d:"Explore o tamanho do universo",i:"https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&h=600&fit=crop",u:"https://neal.fun/size-of-space/"},
-{n:"Who Was Alive?",d:"Quem estava vivo quando você nasceu?",i:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",u:"https://neal.fun/who-was-alive/"},
-{n:"Design the Next iPhone",d:"Desenhe o próximo iPhone",i:"https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=800&h=600&fit=crop",u:"https://neal.fun/design-the-next-iphone/"},
-{n:"Paper",d:"Um papel infinito pra desenhar",i:"https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop",u:"https://neal.fun/paper/"},
-{n:"Ambient Chaos",d:"Crie caos com sons ambientes",i:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",u:"https://neal.fun/ambient-chaos/"},
-{n:"Rocks",d:"Coleção de pedras virtuais",i:"https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=800&h=600&fit=crop",u:"https://neal.fun/rocks/"},
-{n:"Days Since Incident",d:"Contador de dias sem acidentes",i:"https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=600&fit=crop",u:"https://neal.fun/days-since-incident/"},
-{n:"Ten Years Ago",d:"Como era a internet há 10 anos",i:"https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=800&h=600&fit=crop",u:"https://neal.fun/ten-years-ago/"},
-{n:"Universe Forecast",d:"Previsão do tempo do universo",i:"https://images.unsplash.com/photo-1464802686167-b939a6910659?w=800&h=600&fit=crop",u:"https://neal.fun/universe-forecast/"},
-{n:"Progress",d:"Barra de progresso da vida",i:"https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop",u:"https://neal.fun/progress/"},
-{n:"Internet Artifacts",d:"Artefatos antigos da internet",i:"https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=600&fit=crop",u:"https://neal.fun/internet-artifacts/"},
-{n:"Wonders of Street View",d:"Lugares incríveis no Google Street View",i:"https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",u:"https://neal.fun/wonders-of-street-view/"},
-{n:"The Deep Sea",d:"Role pra baixo e explore o oceano",i:"https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&h=600&fit=crop",u:"https://neal.fun/deep-sea/"},
-{n:"Space Elevator",d:"Suba um elevador até o espaço",i:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop",u:"https://neal.fun/space-elevator/"},
-{n:"Auction Game",d:"Leilão de itens malucos",i:"https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&h=600&fit=crop",u:"https://neal.fun/auction-game/"},
-{n:"Let's Settle This",d:"Resolva discussões com dados",i:"https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&h=600&fit=crop",u:"https://neal.fun/lets-settle-this/"},
-{n:"Earth Reviews",d:"Avaliações do planeta Terra",i:"https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=800&h=600&fit=crop",u:"https://neal.fun/earth-reviews/"},
-{n:"Baby Map",d:"Nascimentos em tempo real no mundo",i:"https://images.unsplash.com/photo-1522770179533-24471fcdba45?w=800&h=600&fit=crop",u:"https://neal.fun/baby-map/"},
-{n:"Share This Page",d:"Botões de compartilhar infinitos",i:"https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=600&fit=crop",u:"https://neal.fun/share-this-page/"},
-{n:"Where Does the Day Go?",d:"Visualize onde seu dia vai parar",i:"https://images.unsplash.com/photo-1501139083538-0139583c060f?w=800&h=600&fit=crop",u:"https://neal.fun/where-does-the-day-go/"},
-{n:"Printing Money",d:"Imprima dinheiro infinito",i:"https://images.unsplash.com/photo-1579621970795-87facc2f976d?w=800&h=600&fit=crop",u:"https://neal.fun/printing-money/"},
-{n:"Logos from Memory",d:"Desenhe logos famosos de memória",i:"https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=600&fit=crop",u:"https://neal.fun/logos-from-memory/"},
-{n:"Days",d:"Visualize sua vida em dias",i:"https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&h=600&fit=crop",u:"https://neal.fun/days/"}
-];
-
-function init(){
-if(user.nome){
-document.getElementById('login').classList.add('hidden');
-document.getElementById('admin').classList.remove('hidden');
-document.getElementById('userName').textContent = user.nome;
-document.getElementById('userScore').textContent = user.score;
-}
-renderGrid();
-}
-
-function renderGrid(){
-document.getElementById('grid').innerHTML = jogos.map(j=>`
-<div class="card" onclick="abrir('${j.u}')">
-<img src="${j.i}" alt="${j.n}">
-<div class="card-body">
-<h3>${j.n}</h3>
-<p>${j.d}</p>
-</div>
-</div>
-`).join('');
-}
-
-function entrar(){
-let nome = document.getElementById('nomeInput').value.trim();
-if(!nome)return;
-user = {nome:nome,score:0,admin:nome==='BebelDev👑'};
-localStorage.setItem('bielUser',JSON.stringify(user));
-init();
-}
-
-function sair(){
-localStorage.removeItem('bielUser');
-location.reload();
-}
-
-function abrir(url){
-user.score+=10;
-localStorage.setItem('bielUser',JSON.stringify(user));
-document.getElementById('userScore').textContent = user.score;
-document.getElementById('gameView').classList.remove('hidden');
-document.getElementById('gameFrame').src = url;
-}
-
-function fechar(){
-document.getElementById('gameView').classList.add('hidden');
-document.getElementById('gameFrame').src = '';
-}
-
-init();
-</script>
-</body>
-</html><body>
-<div id="userBar" class="hidden">👤 <span id="userName"></span> | 🏆 <span id="userScore">0</span> <button onclick="sair()">Sair</button></div>
-<div class="container">
-<div id="login">
-<h1>Biel.Fun 👑</h1>
-<p class="subtitle">Experimentos e jogos pra passar o tempo</p>
-<input type="text" id="nomeInput" placeholder="Digite seu nome" maxlength="20">
-<br><button onclick="entrar()">ENTRAR</button>
-</div>
-<div id="menu" class="hidden">
-<h1>Biel.Fun 👑</h1>
-<p class="subtitle">Clique em qualquer experimento pra começar</p>
-<div class="games-grid" id="gamesGrid"></div>
-<div id="adminPanel" class="admin-panel hidden">
-<h3>👑 PAINEL ADMIN</h3>
-<input type="number" id="addScore" placeholder="Pontos">
-<button onclick="addPontos()">Add Pontos</button>
-<button onclick="zerarPontos()">Zerar</button>
-<button onclick="verRanking()">Ranking</button>
-</div>
-</div>
-</div>
-<div id="gameFrame" class="game-frame hidden">
-<button class="close-game" onclick="fecharJogo()">✕ FECHAR</button>
-<iframe id="gameIframe" src=""></iframe>
-</div>
-<script>
-let user = { nome: '', score: 0, isAdmin: false };
-
-// JOGOS INSPIRADOS NO NEAL.FUN - com links pros originais
-const games = [
-{
-nome: 'Draw a Perfect Circle',
-desc: 'Consegue desenhar um círculo perfeito? Teste sua precisão.',
-img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&h=400&fit=crop',
-url: 'https://neal.fun/perfect-circle/',
-tag: 'Precisão'
-},
-{
-nome: 'Spend Bill Gates Money',
-desc: 'Gaste toda a fortuna do Bill Gates. O que você compraria?',
-img: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600&h=400&fit=crop',
-url: 'https://neal.fun/spend/',
-tag: 'Simulação'
-},
-{
-nome: 'Asteroid Launcher',
-desc: 'Lance um asteroide na Terra e veja a destruição.',
-img: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=600&h=400&fit=crop',
-url: 'https://neal.fun/asteroid-launcher/',
-tag: 'Espaço'
-},
-{
-nome: 'The Password Game',
-desc: 'Crie uma senha seguindo regras cada vez mais absurdas.',
-img: 'https://images.unsplash.com/photo-1555421689-3f034debb7a6?w=600&h=400&fit=crop',
-url: 'https://neal.fun/password-game/',
-tag: 'Puzzle'
-},
-{
-nome: 'Absurd Trolley Problems',
-desc: 'Problemas morais do bonde desgovernado em versão absurda.',
-img: 'https://images.unsplash.com/photo-1569173112611-52a7b2aa31f8?w=600&h=400&fit=crop',
-url: 'https://neal.fun/absurd-trolley-problems/',
-tag: 'Filosofia'
-},
-{
-nome: 'Life Stats',
-desc: 'Veja estatísticas da sua vida em tempo real.',
-img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop',
-url: 'https://neal.fun/life-stats/',
-tag: 'Dados'
-},
-{
-nome: 'Size of Space',
-desc: 'Explore o tamanho do universo rolando pra baixo.',
-img: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=600&h=400&fit=crop',
-url: 'https://neal.fun/size-of-space/',
-tag: 'Espaço'
-},
-{
-nome: 'Internet Artifacts',
-desc: 'Navegue por artefatos antigos da internet.',
-img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&h=400&fit=crop',
-url: 'https://neal.fun/internet-artifacts/',
-tag: 'História'
-}
-];
-
-window.onload = () => {
-let saved = localStorage.getItem('bielUser');
-if (saved) { user = JSON.parse(saved); mostrarMenu(); }
-renderGames();
-};
-
-function renderGames() {
-const grid = document.getElementById('gamesGrid');
-grid.innerHTML = games.map(g => `
-<div class="game-card" onclick="abrirJogo('${g.url}')">
-<img src="${g.img}" alt="${g.nome}">
-<div class="game-card-content">
-<h3>${g.nome}</h3>
-<p>${g.desc}</p>
-<span class="tag">${g.tag}</span>
-</div>
-</div>
-`).join('');
-}
-
-function entrar() {
-let nome = document.getElementById('nomeInput').value.trim();
-if (!nome) return alert('Digita um nome!');
-user.nome = nome;
-user.isAdmin = nome === 'BebelDev👑';
-salvarUser(); mostrarMenu();
-}
-
-function mostrarMenu() {
-document.getElementById('login').classList.add('hidden');
-document.getElementById('menu').classList.remove('hidden');
-document.getElementById('userBar').classList.remove('hidden');
-document.getElementById('userName').textContent = user.nome;
-document.getElementById('userScore').textContent = user.score;
-if (user.isAdmin) document.getElementById('adminPanel').classList.remove('hidden');
-}
-
-function sair() {
-localStorage.removeItem('bielUser');
-location.reload();
-}
-
-function salvarUser() {
-localStorage.setItem('bielUser', JSON.stringify(user));
-document.getElementById('userScore').textContent = user.score;
-}
-
-function addPontos() {
-let pts = parseInt(document.getElementById('addScore').value) || 0;
-user.score += pts; salvarUser(); alert(`+${pts} pontos!`);
-}
-
-function zerarPontos() { user.score = 0; salvarUser(); alert('Zerado!'); }
-
-function verRanking() {
-let rank = JSON.parse(localStorage.getItem('bielRanking') || '[]');
-rank.push({nome: user.nome, score: user.score});
-rank.sort((a,b) => b.score - a.score);
-localStorage.setItem('bielRanking', JSON.stringify(rank.slice(0,10)));
-alert('🏆 TOP 10:\n\n' + rank.slice(0,10).map((r,i) => `${i+1}. ${r.nome} - ${r.score}pts`).join('\n'));
-}
-
-function abrirJogo(url) {
-user.score += 5; salvarUser(); // Ganha 5 pontos por jogar
-document.getElementById('gameFrame').classList.remove('hidden');
-document.getElementById('gameIframe').src = url;
-}
-
-function fecharJogo() {
-document.getElementById('gameFrame').classList.add('hidden');
-document.getElementById('gameIframe').src = '';
-}
 </script>
 </body>
 </html>
